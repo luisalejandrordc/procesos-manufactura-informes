@@ -1,0 +1,1410 @@
+\documentclass[12pt,a4paper]{article}
+
+% ----- Encoding and language -----------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-tabla,es-nodecimaldot, es-noquoting]{babel}
+\usepackage{microtype}
+
+% ----- Page layout --------------------------------------------------- 
+\usepackage[a4paper,left=2.6cm,right=2.6cm,top=2.8cm,bottom=2.6cm,headheight=15pt]{geometry}
+\linespread{1.15}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+
+% ----- Colors --------------------------------------------------------
+\usepackage[table]{xcolor}
+\definecolor{darkblue}{HTML}{0B2545}
+\definecolor{mediumblue}{HTML}{1D4E89}
+\definecolor{lightblue}{HTML}{DCE7F3}
+\definecolor{borderblue}{HTML}{B8C7DD}
+\definecolor{lightgray}{HTML}{F5F6F8}
+
+% ----- Packages ------------------------------------------------------
+\usepackage{graphicx,float,booktabs,tabularx,array,multirow,longtable}
+\usepackage{enumitem,amsmath,amssymb,caption,xparse,url}
+\usepackage{siunitx}
+\sisetup{output-decimal-marker={,}, inter-unit-product=\ensuremath{{}\cdot{}}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr,titlesec}
+
+% ----- Header and footer ---------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[L]{\sffamily\footnotesize\bfseries\color{darkblue} Facultad de
+Ingeniería Industrial}
+\fancyfoot[R]{\sffamily\footnotesize\bfseries\color{darkblue}Pag \thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.8pt}
+\renewcommand{\footrule}{{\color{darkblue}\hrule width\headwidth
+height\footrulewidth}}
+
+% ----- Section titles -----------------------------------------------
+\titleformat{\section}
+  {\sffamily\bfseries\Large\color{darkblue}}{\thesection.}{0.6em}{}
+  % [{\vspace{-0.6ex}\color{mediumblue}\titlerule[1.3pt]}]
+\titleformat{\subsection}
+  {\sffamily\bfseries\large\color{mediumblue}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\sffamily\bfseries\normalsize\color{darkblue}}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{2.4ex plus 1ex minus .2ex}{1.6ex}
+\titlespacing*{\subsection}{0pt}{2.0ex plus .8ex minus .2ex}{1.0ex}
+\titlespacing*{\subsubsection}{0pt}{1.6ex plus .5ex}{0.6ex}
+\addto\captionsspanish{\renewcommand{\contentsname}{CONTENIDO}}
+
+% ----- Captions and tables ------------------------------------------
+\captionsetup{font=small,labelfont={bf,color=darkblue},labelsep=period,
+              textfont={color=black!80},skip=6pt}
+\renewcommand{\arraystretch}{1.22}
+\setlist{itemsep=2pt,topsep=3pt,parsep=0pt}
+
+% Table header cell (white text on dark blue)
+\newcommand{\encab}[1]{\textcolor{white}{\sffamily\bfseries #1}}
+
+% Highlighting data that the student must confirm
+\newcommand{\verificar}[1]{\colorbox{yellow!45}{#1}}
+
+% ----- Text boxes ----------------------------------------------------
+\newtcolorbox{nota}[1][Nota]{colback=lightblue,colframe=mediumblue,coltitle=white,
+  fonttitle=\sffamily\bfseries\small,title=#1,arc=2pt,boxrule=0.6pt,
+  left=7pt,right=7pt,top=4pt,bottom=4pt,breakable}
+\newtcolorbox{enunciado}{colback=lightblue,colframe=darkblue,arc=2pt,boxrule=0pt,
+  leftrule=3pt,left=8pt,right=8pt,top=4pt,bottom=4pt,breakable,fontupper=\sffamily\small}
+
+% ----- Image with placeholder box if file does not exist -------------
+% Uso: \imagen[width][box height]{file}{description}
+\NewDocumentCommand{\imagen}{O{0.6} O{5cm} m m}{%
+  \IfFileExists{#3}{\includegraphics[width=#1\linewidth]{#3}}{%
+    {\setlength{\fboxsep}{0pt}\fcolorbox{borderblue}{lightgray}{%
+      \parbox[c][#2][c]{#1\linewidth}{\centering\sffamily\small\color{darkblue}%
+      \textbf{[ Insertar imagen
+]}\\[3pt]\texttt{\detokenize{#3}}\\[3pt]\footnotesize #4}}}}}
+
+% ----- Links ---------------------------------------------------------
+\usepackage[colorlinks=true,breaklinks=true,linkcolor=darkblue,urlcolor=mediumblue,citecolor=darkblue,
+  pdftitle={Laboratorio N.º 2: Metrología},
+  pdfauthor={Ahon Saenz, Maria Julia Armida; Rey de Castro Rupay, Luis
+Alejandro},
+  pdfsubject={Procesos de Manufactura — UNMSM}]{hyperref}
+\urlstyle{same}
+\makeatletter\g@addto@macro\UrlBreaks{\do\-}\makeatother
+\Urlmuskip=0mu plus 2mu\relax
+\setlength{\emergencystretch}{2.5em}
+\newcommand{\refbib}[1]{[\ref{#1}]}
+
+% =====================================================================
+\begin{document}
+% =====================================================================
+
+% ===== COVER PAGE ====================================================
+\begin{titlepage}
+	\thispagestyle{empty}
+	\begin{tikzpicture}[remember picture,overlay]
+		\fill[darkblue] (current page.north west) rectangle ($(current page.north
+			east)+(0,-4.4cm)$);
+		\fill[mediumblue] ($(current page.north west)+(0,-4.4cm)$) rectangle
+		($(current page.north east)+(0,-4.65cm)$);
+		\fill[darkblue] (current page.south west) rectangle ($(current page.south
+			east)+(0,1.1cm)$);
+		\node[text=white,align=center,text width=16cm,font=\sffamily] at ($(current
+			page.north)+(0,-2.25cm)$) {%
+			{\Large\bfseries UNIVERSIDAD NACIONAL MAYOR DE SAN MARCOS}\\[5pt]
+			{\small\itshape Universidad del Perú, Decana de América}\\[10pt]
+			{\normalsize\bfseries ESCUELA PROFESIONAL DE INGENIERÍA INDUSTRIAL}};
+	\end{tikzpicture}
+
+	\vspace*{2cm}
+
+	\begin{center}
+		\imagen[0.22][4.3cm]{img/unmsm-logo.png}{}
+
+		\vspace{0.8cm}
+		{\sffamily\bfseries\color{darkblue}\fontsize{22}{26}\selectfont
+			Laboratorio N\textdegree 2: Metrología\par}
+
+		\vspace{0.4cm}
+
+		\begin{tcolorbox}[colback=white,colframe=white,arc=3pt,width=0.9\linewidth,
+				box align=center,left=12pt,right=12pt,top=8pt,bottom=8pt]
+			\centering\sffamily
+			\begin{tabular}{@{}>{\bfseries\color{darkblue}}r@{\hspace{1em}}l@{}}
+				Asignatura: & Procesos de Manufactura (L1-3) \\[5pt]
+				Docente:    & Mg. Ing. Víctor Rosales Urbano \\
+			\end{tabular}
+		\end{tcolorbox}
+
+		\vspace{0.4cm}
+		{\sffamily\bfseries\color{darkblue}\large Integrantes\par}
+		\vspace{5pt}
+		\sffamily\begin{tabular}{@{}l@{\hspace{2.5em}}r@{}}
+			Ahon Saenz, Maria Julia Armida      & (23170001) \\
+			Rey de Castro Rupay, Luis Alejandro & (22170163) \\
+		\end{tabular}
+
+		\vspace{1cm}
+
+		\imagen[0.6][5.2cm]{img/portada.png}{Imagen de portada}
+	\end{center}
+
+	\vfill
+	\begin{center}
+		{\sffamily\bfseries\color{darkblue}\large Lima, 2026\par}
+	\end{center}
+\end{titlepage}
+\setcounter{page}{2}
+
+% ===== CONTENIDO =====================================================
+\tableofcontents
+\newpage
+
+% ===== 1. PRESENTACIÓN ===============================================
+\section{PRESENTACIÓN}
+
+La metrología es la ciencia de la medición y de sus aplicaciones. En manufactura
+es la condición previa de casi todo lo demás: no se puede controlar una
+tolerancia, garantizar que dos piezas ensamblen entre sí ni decidir si un lote
+se acepta o se rechaza sin antes medir bien. En Ingeniería Industrial esto es
+especialmente importante, porque las decisiones sobre calidad, costos y
+productividad se apoyan en datos que solo son útiles si provienen de
+mediciones confiables.\\[-4pt]
+
+En este segundo laboratorio de Procesos de Manufactura medimos una misma pieza
+de acero con tres instrumentos de distinta resolución: una regla (escuadra), un
+vernier (pie de rey) y un micrómetro de exteriores. Lo valioso de la práctica es
+que la pieza es siempre la misma y solo cambia la herramienta, de modo que las
+diferencias entre lecturas pueden atribuirse al instrumento y al método de
+medición, y no a la pieza. Esa comparación directa nos permitió ver, con
+nuestros propios números, por qué existen instrumentos distintos y cuándo
+conviene emplear cada uno.\\[-4pt]
+
+\begin{figure}[H]
+	\centering
+	\imagen[0.45][4.2cm]{img/presentacion.jpeg}{}
+\end{figure}
+
+Además, el laboratorio nos obligó a trabajar con dos sistemas de unidades
+(milímetros y pulgadas), algo habitual en la industria, donde planos,
+herramientas y catálogos conviven en ambos sistemas. Un error de conversión
+puede parecer trivial en el papel, pero, como se menciona en la sección de
+accidentes relacionados, ha tenido consecuencias muy costosas en proyectos
+reales.
+
+% ===== 2. MARCO TEÓRICO ==============================================
+\section{MARCO TEÓRICO}
+
+\subsection{Sistema Internacional de Unidades}
+
+El \textbf{Sistema Internacional de Unidades (SI)} es el sistema de medida
+coherente de uso mundial. Su mantenimiento está a cargo de la Oficina
+Internacional de Pesas y Medidas (BIPM), organismo creado a partir de la
+Convención del Metro de 1875.\\[-4pt]
+
+Desde el 20 de mayo de 2019 el SI se define fijando el valor numérico exacto de
+siete constantes de la naturaleza (Tabla~\ref{tab:constantes}); con ello,
+ninguna unidad depende ya de un objeto material, como ocurría con el antiguo
+prototipo internacional del kilogramo. En el Perú, el Sistema Legal de Unidades
+de Medida (SLUMP), establecido por la Ley N\textdegree 23560, adopta el SI junto
+con sus múltiplos y submúltiplos decimales.\\[-4pt]
+
+\begin{table}[!htb]
+	\centering
+	\caption{Constantes definitorias del SI}\label{tab:constantes}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}X c c c}
+		\rowcolor{darkblue}
+		\encab{Constante}                                    & \encab{Símbolo}
+		                                                     & \encab{Valor exacto}
+		                                                     & \encab{Unidad que
+			                                                       fija}
+		\\
+		Frecuencia de la transición hiperfina del $^{133}$Cs &
+		$\Delta\nu_{\mathrm{Cs}}$                            & $9\,192\,631\,770$ Hz
+		                                                     & segundo
+		\\
+		Velocidad de la luz en el vacío                      & $c$
+		                                                     & $299\,792\,458$ m/s
+		                                                     & metro
+		\\
+		Constante de Planck                                  & $h$
+		                                                     &
+		$6{,}626\,070\,15\times10^{-34}$ J$\cdot$s           & kilogramo
+		\\
+		Carga elemental                                      & $e$
+		                                                     &
+		$1{,}602\,176\,634\times10^{-19}$ C                  & amperio
+		\\
+		Constante de Boltzmann                               & $k$
+		                                                     &
+		$1{,}380\,649\times10^{-23}$ J/K                     & kelvin
+		\\
+		Constante de Avogadro                                & $N_A$
+		                                                     &
+		$6{,}022\,140\,76\times10^{23}$ mol$^{-1}$           & mol
+		\\
+		Eficacia luminosa a $540\times10^{12}$ Hz            & $K_{\mathrm{cd}}$
+		                                                     & $683$ lm/W            &
+		candela
+		\\
+	\end{tabularx}
+\end{table}
+
+\vspace{4pt}
+
+Las unidades pueden expresarse con prefijos decimales, de los cuales los más
+usados en metrología dimensional se resumen en la Tabla~\ref{tab:prefijos}. Cabe
+añadir que, fuera del SI, la industria sigue utilizando la \textbf{pulgada},
+cuya equivalencia con el sistema métrico es exactamente $1\ \text{in} =
+	\SI{25.4}{\milli\metre}$.\\[-4pt]
+
+\begin{table}[!htb]
+	\centering
+	\caption{Prefijos del SI frecuentes en metrología
+		dimensional}\label{tab:prefijos}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabular}{l c c @{\hspace{2.5em}} l c c}
+		\rowcolor{darkblue}
+		\encab{Prefijo} & \encab{Símbolo} & \encab{Factor} & \encab{Prefijo} &
+		\encab{Símbolo} & \encab{Factor}
+		\\
+		kilo            & k               & $10^{3}$       & centi           & c
+		                & $10^{-2}$                                                \\
+		mega            & M               & $10^{6}$       & mili            & m
+		                & $10^{-3}$
+		\\
+		giga            & G               & $10^{9}$       & micro           &
+		\textmu         & $10^{-6}$
+		\\
+		deci            & d               & $10^{-1}$      & nano            & n &
+		$10^{-9}$                                                                  \\
+	\end{tabular}
+\end{table}
+
+\subsection{Unidades fundamentales}
+
+Las \textbf{unidades fundamentales o de base} son aquellas a partir de las
+cuales se construyen todas las demás. El SI reconoce siete, cada una asociada a
+una magnitud física independiente (Tabla~\ref{tab:base}).
+
+En este laboratorio la magnitud de interés es la \textbf{longitud}, cuya unidad
+es el metro. En la práctica de taller se trabaja con su submúltiplo, el
+milímetro ($\SI{1}{\milli\metre} = 10^{-3}\ \text{m}$), y con el micrómetro o
+micra ($\SI{1}{\micro\metre} = 10^{-6}\ \text{m}$) cuando se habla de
+tolerancias finas y de rugosidad.
+
+\begin{table}[!htb]
+	\centering
+	\caption{Magnitudes y unidades de base del SI}\label{tab:base}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabular}{l l c }
+		\rowcolor{darkblue}
+		\encab{Magnitud}          & \encab{Unidad} & \encab{Símbolo} \\
+		Longitud                  & metro          & m               \\
+		Masa                      & kilogramo      & kg              \\
+		Tiempo                    & segundo        & s               \\
+		Corriente eléctrica       & amperio        & A               \\
+		Temperatura termodinámica & kelvin         & K               \\
+		Cantidad de sustancia     & mol            & mol             \\
+		Intensidad luminosa       & candela        & cd              \\
+	\end{tabular}
+\end{table}
+
+\subsection{Unidades derivadas}
+
+Las \textbf{unidades derivadas} se obtienen combinando unidades de base mediante
+productos y cocientes, sin factores numéricos adicionales (por eso el SI es un
+sistema \emph{coherente}). Algunas reciben un nombre especial en honor a un
+científico. La Tabla~\ref{tab:derivadas} resume las que más aparecen en
+manufactura.\\[-4pt]
+
+\begin{table}[!htb]
+	\centering
+	\caption{Unidades derivadas del SI de uso frecuente en
+		manufactura}\label{tab:derivadas}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{l l c >{\raggedright\arraybackslash}X}
+		\rowcolor{darkblue}
+		\encab{Magnitud}        & \encab{Unidad}             & \encab{Símbolo} &
+		\encab{Expresión}
+		\\
+		Área                    & metro cuadrado             & m$^2$           & m
+		$\cdot$ m
+		\\
+		Volumen                 & metro cúbico               & m$^3$           & m
+		$\cdot$ m $\cdot$ m
+		\\
+		Velocidad               & metro por segundo          & m/s             & m
+		$\cdot$ s$^{-1}$
+		\\
+		Velocidad angular       & radián por segundo         & rad/s           &
+		s$^{-1}$ (1 rad $=$ m/m)
+		\\
+		Frecuencia              & hercio                     & Hz              &
+		s$^{-1}$
+		\\
+		Densidad                & kilogramo por metro cúbico & kg/m$^3$        & kg
+		$\cdot$ m$^{-3}$
+		\\
+		Fuerza                  & newton                     & N               & kg
+		$\cdot$ m $\cdot$ s$^{-2}$
+		\\
+		Presión                 & pascal                     & Pa              &
+		N/m$^2$ $=$ kg $\cdot$ m$^{-1}$ $\cdot$ s$^{-2}$
+		\\
+		Energía, trabajo        & julio                      & J               & N
+		$\cdot$ m
+		\\
+		Potencia                & vatio                      & W               & J/s
+		\\
+		Par (momento de fuerza) & newton metro               & N$\cdot$m       & N
+		$\cdot$ m
+		\\
+		Tensión eléctrica       & voltio                     & V               & W/A
+		\\
+		Resistencia eléctrica   & ohmio                      & $\Omega$        & V/A
+		\\
+	\end{tabularx}
+\end{table}
+
+\vspace{4pt}
+
+Aunque el par y la energía son dimensionalmente iguales (N$\cdot$m), el SI
+reserva el julio para la energía y expresa el par como newton metro. Por otro
+lado, magnitudes como el área y el volumen de una pieza se obtienen
+\emph{indirectamente} a partir de longitudes medidas con vernier, micrómetro o
+algún otro instrumento de medición de longitud.
+
+\subsection{Instrumentos de medición}
+
+Un \textbf{instrumento de medición} es un dispositivo utilizado para realizar
+mediciones, solo o acompañado de dispositivos complementarios. Para comparar
+instrumentos conviene manejar los siguientes conceptos:
+
+\vspace{4pt}
+
+\begin{itemize}
+	\item \textbf{Resolución:} menor variación de la magnitud que produce una
+	      variación perceptible en la indicación del instrumento.
+	\item \textbf{Exactitud:} cercanía entre el valor medido y el valor de
+	      referencia.
+	\item \textbf{Precisión:} cercanía entre mediciones repetidas en las mismas
+	      condiciones.
+	\item \textbf{Error de medición:} diferencia entre el valor medido $x_m$ y un
+	      valor de referencia $x_{ref}$. Se expresa como error absoluto y
+	      relativo:
+	      \[
+		      E_a = x_m - x_{ref}, \qquad E_r = \frac{|E_a|}{x_{ref}}\times
+		      100\,\text{\%}
+	      \]
+	\item \textbf{Calibración y trazabilidad:} comparación del instrumento con
+	      patrones cuyo valor está vinculado, mediante una cadena ininterrumpida,
+	      a los patrones nacionales e internacionales.
+\end{itemize}
+
+\vspace{4pt}
+
+Los instrumentos de longitud utilizados en el laboratorio son de \emph{lectura
+	directa sobre una escala}. Sus principios y resoluciones se resumen a
+continuación.
+
+\vspace{4pt}
+
+\begin{description}[leftmargin=0pt,style=unboxed,labelindent=0pt]
+	\item[Regla y escuadra graduadas.] Se lee la posición del extremo de la pieza
+	      sobre una escala impresa o grabada. Con divisiones de
+	      \SI{1}{\milli\metre}, la
+	      resolución es de \SI{1}{\milli\metre} y la incertidumbre de lectura se
+	      estima en la mitad de una división ($\pm\SI{0.5}{\milli\metre}$), sin
+	      contar errores de paralaje ni de alineación.\\[-4pt]
+	\item[Vernier o pie de rey.] Usa una segunda escala deslizante (el
+	      \emph{nonio}) con $n$ divisiones que abarcan $n-1$ divisiones de la
+	      escala principal, lo que permite leer fracciones de división. Si $d$ es
+	      la menor división de la escala principal:
+	      \[
+		      r = \frac{d}{n} = \frac{\SI{1}{\milli\metre}}{20} =
+		      \SI{0.05}{\milli\metre},
+		      \qquad L = L_{\text{principal}} + k\cdot r
+	      \]
+	      donde $k$ es el número de la división del nonio que coincide con una
+	      raya de la escala principal. Los vernier con escala en pulgadas de
+	      $1/128$ in resuelven aproximadamente \SI{0.198}{\milli\metre}.\\[-4pt]
+	\item[Micrómetro de exteriores.] Se basa en el avance de un tornillo de paso
+	      conocido. Si el paso es $p = \SI{0.5}{\milli\metre}$ y el tambor tiene
+	      $N = 50$
+	      divisiones, cada división equivale a
+	      \[
+		      r = \frac{p}{N} = \frac{\SI{0.5}{\milli\metre}}{50} =
+		      \SI{0.01}{\milli\metre}
+	      \]
+	      La lectura es la suma de la lectura del manguito (escala fija) y la del
+	      tambor. El trinquete garantiza una fuerza de medición constante, y el
+	      rango típico de cada micrómetro es de \SI{25}{\milli\metre}.
+\end{description}
+
+\begin{nota}[Criterio práctico de selección]
+	La llamada \emph{regla de diez a uno} recomienda que la resolución del
+	instrumento sea, como mucho, una décima parte de la tolerancia que se desea
+	verificar. Así, para una tolerancia de $\pm\SI{0.1}{\milli\metre}$ (banda de
+	\SI{0.2}{\milli\metre}) se requiere resolución de \SI{0.02}{\milli\metre} o
+	mejor, lo que descarta la regla y obliga a usar un micrómetro.
+\end{nota}
+
+% ===== 3. MATERIALES Y EQUIPOS =======================================
+\section{MATERIALES Y EQUIPOS}
+
+\subsection{Regla}
+
+Se empleó una \textbf{escuadra} de plástico transparente con escala graduada en
+milímetros. Es el instrumento más simple y económico del laboratorio y sirve
+para mediciones aproximadas: al no tener un tope de referencia ni mordazas, la
+lectura depende de que el operador alinee bien el cero con el borde de la pieza
+y observe la escala de frente para evitar el error de paralaje.
+
+\begin{figure}[H]
+	\centering
+	\imagen[0.55][4.2cm]{img/regla.png}{}
+	\caption{Regla (escuadra) utilizada en las mediciones.}
+\end{figure}
+
+\begin{table}[!htb]
+	\centering
+	\small
+	\rowcolors{1}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{>{\bfseries}l X}
+		Tipo                     & Escuadra plástica graduada
+		\\
+		Graduación / resolución  & \SI{1}{\milli\metre}
+		\\
+		Incertidumbre de lectura & $\pm\SI{0.5}{\milli\metre}$ (media división), más
+		paralaje y alineación
+		\\
+		Rango                    & aprox. 0--200 mm
+		\\
+	\end{tabularx}
+\end{table}
+
+\subsection{Vernier o Pie de Rey}
+
+El vernier utilizado es de marca Mitutoyo, con escala principal en milímetros y
+en pulgadas. Consta de mordazas exteriores (para longitudes y espesores),
+mordazas interiores (para diámetros de agujeros y ranuras), una
+varilla de profundidad, la escala principal, el nonio y un tornillo de fijación
+de lectura. Las lecturas registradas son múltiplos de \SI{0.05}{\milli\metre} en
+la escala métrica y de $1/128$ in en la escala inglesa.
+
+\begin{figure}[H]
+	\centering
+	\imagen[0.5][4.6cm]{img/vernier.jpeg}{}
+	\caption{Vernier o pie de rey (Mitutoyo).}
+\end{figure}
+
+\begin{table}[!htb]
+	\centering
+	\small
+	\rowcolors{1}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{>{\bfseries}l X}
+		Marca      & Mitutoyo
+		\\
+		Resolución & \SI{0.05}{\milli\metre} (escala métrica) y $1/128$ in (escala
+		en pulgadas)
+		\\
+		Rango      & aprox. 0--150 mm
+		\\
+		Aplicación & Exteriores, interiores (diámetros de agujeros) y profundidades
+		\\
+	\end{tabularx}
+\end{table}
+
+\subsection{Micrómetro}
+
+Se utilizó un micrómetro de exteriores compuesto por arco, yunque, husillo,
+manguito, tambor y trinquete. Su rango de medición es de \SI{0}{} a
+\SI{25}{\milli\metre} y su resolución de \SI{0.01}{\milli\metre}, la mejor de
+los tres instrumentos. Por la profundidad limitada de su arco y su rango máximo,
+solo permite medir dimensiones accesibles desde el borde de la pieza.\\[-4pt]
+
+\begin{figure}[H]
+	\centering
+	\imagen[0.55][4.6cm]{img/micrometro.jpeg}{Micrómetro de exteriores (0--25 mm)}
+	\caption{Micrómetro de exteriores empleado en el laboratorio.}
+\end{figure}
+
+\begin{table}[!htb]
+	\centering
+	\small
+	\rowcolors{1}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{>{\bfseries}l X}
+		Tipo       & Micrómetro de exteriores con trinquete                     \\
+		Rango      & \SIrange{0}{25}{\milli\metre}                              \\
+		Resolución & \SI{0.01}{\milli\metre}                                    \\
+		Limitación & Profundidad del arco: solo mide bordes accesibles; no mide
+		diámetros de agujeros                                                   \\
+	\end{tabularx}
+\end{table}
+
+\subsection{Pieza de acero}
+
+La pieza medida es una placa de acero de acabado oscuro, con un contorno
+escalonado, una ranura rectangular en uno de sus extremos y tres agujeros
+pasantes. Para identificar sus dimensiones se asignó una letra a cada lado y a
+cada diámetro (sección~\ref{sec:resultados}). Sus dimensiones generales son del
+orden de $50\times40\times\SI{11.65}{\milli\metre}$.\\[-4pt]
+
+\begin{figure}[H]
+	\centering
+	\imagen[0.6][5cm]{img/pieza.jpeg}{Pieza de acero con escalón, ranura y tres
+		agujeros}
+	\caption{Pieza de acero sometida a medición.}
+\end{figure}
+
+% ===== 4. PROCEDIMIENTO ==============================================
+\section{PROCEDIMIENTO}
+
+La secuencia de trabajo se resume en la Figura~\ref{fig:flujo} y se detalla a
+continuación.\\[-4pt]
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[node distance=9mm,
+			caja/.style={rectangle,rounded
+					corners=3pt,fill=darkblue,text=white,font=\sffamily\footnotesize\bfseries,
+					minimum height=1.15cm,minimum width=2.55cm,align=center,inner sep=3pt},
+			flecha/.style={-{Stealth[length=2.2mm]},thick,color=mediumblue}]
+		\node[caja] (a) {Identificar\\lados y diámetros};
+		\node[caja,right=of a] (b) {Medir con\\regla};
+		\node[caja,right=of b] (c) {Medir con\\vernier (mm y in)};
+		\node[caja,right=of c] (d) {Medir con\\micrómetro};
+		\draw[flecha] (a)--(b); \draw[flecha] (b)--(c); \draw[flecha] (c)--(d);
+	\end{tikzpicture}
+	\caption{Secuencia del procedimiento experimental.}\label{fig:flujo}
+\end{figure}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+	\item Se asignó una letra a cada lado de la figura, así como a los diámetros
+	      de los agujeros presentes, a modo de identificación
+	      (Figura~\ref{fig:croquis}).
+	\item Se midió la longitud de cada una de estas partes con una regla
+	      (escuadra) y se registraron los resultados en una tabla.
+	\item Se repitió el mismo procedimiento con un vernier, registrando las
+	      medidas en milímetros y en pulgadas en dos columnas distintas.
+	\item Finalmente se empleó el micrómetro, aunque solo fue posible registrar
+	      dos mediciones debido a las limitaciones del instrumento (estructura
+	      física y
+	      rango máximo de \SI{25}{\milli\metre}).
+\end{enumerate}
+
+% ===== 5. ELABORACIÓN DE RESULTADOS ==================================
+\section{ELABORACIÓN DE RESULTADOS}\label{sec:resultados}
+
+\subsection{Identificación de las dimensiones medidas}
+
+La Figura~\ref{fig:croquis} reproduce el croquis de la pieza con la nomenclatura
+utilizada. Las letras A a J corresponden a los lados del contorno (vista
+frontal), K, L y M a los diámetros de los agujeros, y N y O al espesor y a la
+altura total leídos en la vista lateral.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[scale=0.14,
+			lbl/.style={circle,fill=darkblue,text=white,inner
+					sep=1.3pt,font=\sffamily\bfseries\scriptsize},
+			hlbl/.style={font=\sffamily\bfseries\small,text=darkblue},
+			tit/.style={font=\sffamily\small\itshape,text=mediumblue}]
+		% --- Vista frontal
+		\filldraw[fill=lightblue,draw=darkblue,line width=0.9pt,line join=round]
+		(0,0) -- (50,0) -- (50,20) -- (40,20) -- (40,30) -- (50,30) -- (50,40) --
+		(15,40) -- (15,16) -- (0,16) -- cycle;
+		\foreach \x/\y/\n in {7.5/8/K, 37/8/M, 26/30/L}{
+				\filldraw[fill=white,draw=darkblue,line width=0.8pt] (\x,\y) circle
+				(5);
+				\draw[mediumblue,dashed] (\x-5,\y) -- (\x+5,\y);
+				\node[hlbl] at (\x,\y+2.6) {\n};
+			}
+		\node[lbl] at (25,-3.8) {A};
+		\node[lbl] at (-3.8,8) {B};
+		\node[lbl] at (7.5,19.6) {C};
+		\node[lbl] at (11.2,28) {D};
+		\node[lbl] at (32.5,43.8) {E};
+		\node[lbl] at (53.8,35) {F};
+		\node[lbl] at (45,33.4) {G};
+		\node[lbl] at (36.8,25) {H};
+		\node[lbl] at (45,16.6) {I};
+		\node[lbl] at (53.8,10) {J};
+		\node[tit] at (25,-9.5) {Vista frontal};
+		% --- Vista lateral
+		\filldraw[fill=lightblue,draw=darkblue,line width=0.9pt] (66,0) rectangle
+		(77.65,40);
+		\node[lbl] at (81.6,20) {O};
+		\node[lbl] at (71.8,-3.8) {N};
+		\node[tit] at (71.8,-9.5) {Vista lateral};
+	\end{tikzpicture}
+	\caption{Croquis de la pieza con la nomenclatura empleada (esquema aproximado,
+		no a escala exacta).}\label{fig:croquis}
+\end{figure}
+
+\subsection{Registro de mediciones}
+
+Las lecturas obtenidas con los tres instrumentos se presentan en la
+Tabla~\ref{tab:datos}. Las lecturas en pulgadas se anotaron como fracciones de
+$1/128$ in y se incluye su equivalente decimal.
+
+\begin{table}[!htb]
+	\centering
+	\caption{Mediciones de la pieza con regla, vernier y
+		micrómetro}\label{tab:datos}
+	\small
+	\setlength{\tabcolsep}{4pt}
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabular}{c l r r c r r}
+		\rowcolor{darkblue}
+		\encab{Lado}    & \encab{Descripción (según croquis)} & \encab{Regla}   &
+		\encab{Vernier} & \encab{Vernier}                     & \encab{Vernier} &
+		\encab{Micrómetro}
+		\\
+		\rowcolor{darkblue}
+		                &                                     & \encab{(mm)}    &
+		\encab{(mm)}    & \encab{(x/128 in)}                  & \encab{(in)}    &
+		\encab{(mm)}
+		\\
+		A               & Base inferior                       & 49              &
+		50,00
+		                & 252/128                             & 1,9688          & --
+		\\
+		B               & Lado izquierdo inferior             & 16              &
+		16,30
+		                & 82/128                              & 0,6406          &
+		16,18
+		\\
+		C               & Escalón horizontal                  & 16              &
+		14,90
+		                & 75/128                              & 0,5859          & --
+		\\
+		D               & Lado izquierdo superior             & 24              &
+		23,30
+		                & 118/128                             & 0,9219          & --
+		\\
+		E               & Lado superior                       & 33              &
+		34,05
+		                & 172/128                             & 1,3438          & --
+		\\
+		F               & Lado derecho superior               & 10              &
+		10,00
+		                & 51/128                              & 0,3984          & --
+		\\
+		G               & Ranura, lado superior               & 10              &
+		10,00
+		                & 51/128                              & 0,3984          & --
+		\\
+		H               & Ranura, fondo                       & 10              &
+		10,00
+		                & 51/128                              & 0,3984          & --
+		\\
+		I               & Ranura, lado inferior               & 10              & 9,90
+		                & 50/128                              & 0,3906          & --
+		\\
+		J               & Lado derecho inferior               & 20              &
+		20,05
+		                & 101/128                             & 0,7891          & --
+		\\
+		K               & Diámetro de agujero                 & 10              &
+		10,00           & 51/128                              & 0,3984          & --
+		\\
+		L               & Diámetro de agujero                 & 10              &
+		10,10
+		                & 51/128                              & 0,3984          & --
+		\\
+		M               & Diámetro de agujero                 & 10              &
+		8,60            & 44/128                              & 0,3438          & --
+		\\
+		N               & Espesor (vista lateral)             & 11              &
+		11,40
+		                & 58/128                              & 0,4531          &
+		11,65
+		\\
+		O               & Altura total (vista lateral)        & 40              &
+		40,05           & 202/128                             & 1,5781          & --
+		\\
+	\end{tabular}
+\end{table}
+
+\subsection{Análisis de resultados}
+
+\subsubsection{Comparación entre la regla y el vernier}
+
+Dado que el vernier tiene una resolución veinte veces mejor que la regla
+(\SI{0.05}{\milli\metre} frente a \SI{1}{\milli\metre}), se tomó su lectura como
+referencia de trabajo para las quince dimensiones y se calculó la diferencia
+$\Delta = x_{\text{regla}} - x_{\text{vernier}}$ y el error relativo
+$|\Delta|/x_{\text{vernier}}$ (Tabla~\ref{tab:comparacion}).
+
+\begin{table}[!htb]
+	\centering
+	\caption{Diferencia entre las lecturas de regla y
+		vernier}\label{tab:comparacion}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabular}{c r r r r r}
+		\rowcolor{darkblue}
+		\encab{Lado}            & \encab{Regla (mm)}      & \encab{Vernier (mm)} &
+		\encab{$\Delta$
+			(mm)}
+		                        &
+		\encab{$|\Delta|$ (mm)} & \encab{Error rel. (\%)}
+		\\
+		A                       & 49                      & 50,00                &
+		$-1{,}00$
+		                        & 1,00                    & 2,00
+		\\
+		B                       & 16                      & 16,30                &
+		$-0{,}30$
+		                        & 0,30                    & 1,84
+		\\
+		C                       & 16                      & 14,90                &
+		$+1{,}10$
+		                        & 1,10                    & 7,38
+		\\
+		D                       & 24                      & 23,30                &
+		$+0{,}70$
+		                        & 0,70                    & 3,00
+		\\
+		E                       & 33                      & 34,05                &
+		$-1{,}05$               & 1,05                    & 3,08
+		\\
+		F                       & 10                      & 10,00                &
+		$0{,}00$
+		                        & 0,00                    & 0,00
+		\\
+		G                       & 10                      & 10,00                &
+		$0{,}00$
+		                        & 0,00                    & 0,00
+		\\
+		H                       & 10                      & 10,00                &
+		$0{,}00$                & 0,00                    & 0,00
+		\\
+		I                       & 10                      & 9,90                 &
+		$+0{,}10$
+		                        & 0,10                    & 1,01
+		\\
+		J                       & 20                      & 20,05                &
+		$-0{,}05$
+		                        & 0,05                    & 0,25
+		\\
+		K                       & 10                      & 10,00                &
+		$0{,}00$
+		                        & 0,00                    & 0,00
+		\\
+		L                       & 10                      & 10,10                &
+		$-0{,}10$
+		                        & 0,10                    & 0,99
+		\\
+		M                       & 10                      & 8,60                 &
+		$+1{,}40$
+		                        & 1,40                    & 16,28
+		\\
+		N                       & 11                      & 11,40                &
+		$-0{,}40$               & 0,40                    & 3,51
+		\\
+		O                       & 40                      & 40,05                &
+		$-0{,}05$
+		                        & 0,05                    & 0,12
+		\\
+	\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=\linewidth, height=6.4cm,
+				symbolic x coords={A,B,C,D,E,F,G,H,I,J,K,L,M,N,O},
+				xtick=data, enlarge x limits=0.05,
+				ymin=-1.6, ymax=1.8, ytick={-1.5,-1,-0.5,0,0.5,1,1.5},
+				ylabel={$\Delta = x_{\mathrm{regla}} - x_{\mathrm{vernier}}$ (mm)},
+				xlabel={Lado / diámetro},
+				bar width=7pt,
+				ymajorgrids, grid style={borderblue!70},
+				label style={font=\sffamily\small}, tick label
+				style={font=\sffamily\small},
+				axis x line*=bottom, axis y line*=left,
+				extra y ticks=0, extra y tick labels={}, extra y tick
+				style={grid=major,grid style={solid,black!60}}]
+			\addplot[ybar,fill=mediumblue,draw=darkblue] coordinates {
+					(A,-1.00) (B,-0.30) (C,1.10) (D,0.70) (E,-1.05) (F,0) (G,0) (H,0)
+					(I,0.10) (J,-0.05) (K,0) (L,-0.10) (M,1.40) (N,-0.40) (O,-0.05)};
+			\addplot[sharp plot,no marks,dashed,thick,red!70!black] coordinates
+				{(A,0.5) (O,0.5)};
+			\addplot[sharp plot,no marks,dashed,thick,red!70!black] coordinates
+				{(A,-0.5) (O,-0.5)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Diferencia entre las lecturas de regla y vernier por dimensión. Las
+		líneas discontinuas marcan $\pm\SI{0.5}{\milli\metre}$, la incertidumbre de
+		lectura esperada para una regla graduada en
+		milímetros.}\label{fig:diferencias}
+\end{figure}
+
+El resumen estadístico de las diferencias se presenta en la
+Tabla~\ref{tab:estadistica}.
+
+\begin{table}[!htb]
+	\centering
+	\caption{Resumen estadístico de $\Delta$ (regla $-$ vernier),
+		$n=15$}\label{tab:estadistica}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabular}{l r}
+		\rowcolor{darkblue}
+		\encab{Indicador}                                  & \encab{Valor}        \\
+		Diferencia media con signo                         & $+0{,}02$ mm         \\
+		Diferencia absoluta media $\overline{|\Delta|}$    & 0,42 mm              \\
+		Diferencia absoluta media sin el diámetro M        & 0,35 mm              \\
+		Desviación estándar de $\Delta$                    & 0,66 mm              \\
+		Diferencia absoluta máxima                         & 1,40 mm (diámetro M) \\
+		Mediciones con $|\Delta|\le\SI{0.5}{\milli\metre}$ & 10 de 15 (67\,\%)    \\
+		Error relativo medio                               & 2,6\,\%              \\
+	\end{tabular}
+\end{table}
+
+De estos resultados se desprenden varias observaciones:
+
+\begin{itemize}
+	\item \textbf{No hay un sesgo sistemático.} La diferencia media con signo es
+	      prácticamente nula ($+\SI{0.02}{\milli\metre}$) porque la regla lee unas
+	      veces
+	      por encima y otras por debajo del vernier. Esto sugiere que las
+	      discrepancias
+	      provienen de errores aleatorios de lectura (paralaje, alineación del
+	      cero,
+	      estimación a simple vista) más que de un defecto de la escuadra.
+	\item \textbf{Las dimensiones cortas coinciden bien.} Los lados F, G, H y el
+	      diámetro K dieron lecturas idénticas, y I, J, L y O difieren en
+	      $\SI{0.10}{\milli\metre}$ o menos. Cuando la dimensión coincide con un
+	      número
+	      entero de milímetros, la regla y el vernier coinciden; la regla pierde
+	      exactitud
+	      cuando el valor cae entre dos divisiones.
+	\item \textbf{Las mayores desviaciones aparecen en A, C, D, E y M.} Cinco de
+	      las quince dimensiones superan la incertidumbre esperada de
+	      $\pm\SI{0.5}{\milli\metre}$ (Figura~\ref{fig:diferencias}). Las
+	      diferencias de C
+	      ($+1{,}10$) y E ($-1{,}05$) son casi iguales y de signo opuesto porque
+	      son
+	      tramos consecutivos de un mismo lado: un error al ubicar con la regla el
+	      vértice
+	      del escalón se traslada con signo contrario a ambos tramos, mientras que
+	      su suma
+	      casi coincide (49,00 mm con la regla y 48,95 mm con el vernier). Algo
+	      similar
+	      ocurre con B y D. Es un error típico al medir con regla tramos
+	      consecutivos: se
+	      compensa en la suma, pero no en cada tramo.
+	\item \textbf{El diámetro M es atípico.} El vernier dio
+	      $\SI{8.60}{\milli\metre}$ frente a unos $\SI{10}{\milli\metre}$ de los
+	      otros dos agujeros. La causa más probable es una mala posición de las
+	      mordazas interiores (que dan una cuerda menor que el diámetro si no se
+	      colocan en el diámetro real) o algún borde con rebaba. Se recomienda
+	      repetir esta medición antes de dar el valor como definitivo.
+\end{itemize}
+
+\subsubsection{Comparación con el micrómetro}
+
+Solo dos dimensiones, B (lado) y N (espesor), pudieron medirse con el
+micrómetro. Por su resolución de \SI{0.01}{\milli\metre} y su rango de
+\SI{25}{\milli\metre}, se toma como valor de referencia (Tabla~\ref{tab:micro}).
+
+\begin{table}[!htb]
+	\centering
+	\caption{Errores de regla y vernier respecto del micrómetro}\label{tab:micro}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabular}{c r r r r r r r}
+		\rowcolor{darkblue}
+		\encab{Lado}        & \encab{Micróm.} & \encab{Regla}       & \encab{$E_a$
+			                                                              regla} &
+		\encab{$E_r$ regla} & \encab{Vernier} & \encab{$E_a$ vern.} & \encab{$E_r$
+			                                                              vern.}
+		\\
+		\rowcolor{darkblue}
+		                    & \encab{(mm)}    & \encab{(mm)}        & \encab{(mm)}
+		                    &
+		\encab{(\%)}        & \encab{(mm)}    & \encab{(mm)}        & \encab{(\%)}
+		\\
+		B                   & 16,18           & 16                  & $-0{,}18$    &
+		1,11
+		                    & 16,30           & $+0{,}12$           & 0,74
+		\\
+		N                   & 11,65           & 11                  & $-0{,}65$    &
+		5,58
+		                    & 11,40           & $-0{,}25$           & 2,15
+		\\
+	\end{tabular}
+\end{table}
+
+En ambos casos el vernier estuvo más cerca del micrómetro que la regla (errores
+absolutos de $0{,}12$ y $\SI{0.25}{\milli\metre}$ frente a $0{,}18$ y
+$\SI{0.65}{\milli\metre}$), como cabe esperar de su mejor resolución. Sin
+embargo, la diferencia de $\SI{0.25}{\milli\metre}$ en el espesor N equivale a
+cinco veces la resolución del vernier, por lo que no puede atribuirse solo al
+instrumento. Entre las causas probables están una fuerza de cierre de las
+mordazas distinta a la del trinquete del micrómetro, una ligera inclinación de
+las mordazas respecto de las caras, la presencia de óxido o rebabas, o
+simplemente que las dos mediciones no se hicieron exactamente en el mismo punto
+de la placa. Con solo dos puntos no es posible concluir estadísticamente cuál es
+el error típico del vernier; solo puede afirmarse que, en este caso, su error
+fue mayor que su resolución.
+
+\subsubsection{Cierre geométrico del contorno}
+
+Un modo de verificar la consistencia de un conjunto de mediciones es comprobar
+que las dimensiones \emph{cierran} el contorno. Según el croquis, se debe
+cumplir que la altura del lado izquierdo ($B+D$) coincida con la del derecho
+($F+H+J$) y con la altura total O, y que la base A sea igual a la suma de los
+tramos superiores ($C+E$). Los resultados se muestran en la
+Tabla~\ref{tab:cierre}.
+
+\begin{table}[!htb]
+	\centering
+	\caption{Verificación del cierre geométrico (valores en mm)}\label{tab:cierre}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabular}{l r r}
+		\rowcolor{darkblue}
+		\encab{Comprobación}                        & \encab{Regla} &
+		\encab{Vernier}                                                     \\
+		Altura izquierda $B+D$                      & 40,00         & 39,60
+		\\
+		Altura derecha $F+H+J$                      & 40,00         & 40,05
+		\\
+		Altura total O                              & 40,00         & 40,05
+		\\
+		\textbf{Diferencia (izquierda $-$ derecha)} & \textbf{0,00} &
+		\textbf{$-0{,}45$}                                                  \\
+		Tramo superior $C+E$                        & 49,00         & 48,95
+		\\
+		Base A                                      & 49,00         & 50,00
+		\\
+		\textbf{Diferencia ($C+E$ $-$ $A$)}         & \textbf{0,00} &
+		\textbf{$-1{,}05$}                                                  \\
+	\end{tabular}
+\end{table}
+
+Con la regla el contorno cierra exactamente, pero eso no debe interpretarse como
+mayor exactitud: al redondear cada lado al milímetro más cercano, los errores se
+compensan. Con el vernier, en cambio, aparecen descuadres de
+$\SI{0.45}{\milli\metre}$ en vertical y de $\SI{1.05}{\milli\metre}$ en
+horizontal, mayores que la incertidumbre combinada de sumar tres o dos lecturas
+de $\pm\SI{0.05}{\milli\metre}$. Esto indica que alguna lectura del vernier
+(posiblemente la de la base A o la del escalón C) estuvo afectada por chaflanes,
+rebabas o por un apoyo inadecuado de las mordazas, y refuerza la recomendación
+de repetir las mediciones críticas.
+
+% Conclusiones y recomendaciones
+
+% =========================== 6. CUESTIONARIO =========================
+\section{CUESTIONARIO}
+
+\subsection*{A. Identifique y explique el uso de 3 instrumentos por cada unidad
+	de medida derivada}
+
+\begin{enunciado}
+	A.- Identifica y explique su uso de 3 instrumentos por cada unidad de medida
+	derivada.
+\end{enunciado}
+
+Se seleccionaron seis unidades derivadas de amplio uso en un laboratorio o
+taller de manufactura (Tabla~\ref{tab:cuestionarioA}).
+
+	{\small
+		\setlength{\tabcolsep}{5pt}
+		\begin{longtable}{>{\raggedright\arraybackslash\bfseries}p{2.45cm}
+				>{\raggedright\arraybackslash}p{3.3cm}
+				>{\raggedright\arraybackslash}p{8.4cm}}
+			\caption{Instrumentos por unidad derivada}\label{tab:cuestionarioA}
+			\\
+			\rowcolor{darkblue}\encab{Unidad derivada}       & \encab{Instrumento}
+			                                                 & \encab{Explicación de
+				                                                   su uso}
+			\\
+			\endfirsthead
+			\rowcolor{darkblue}\encab{Unidad derivada}       & \encab{Instrumento}
+			                                                 &
+			\encab{Explicación de su uso}
+			\\
+			\endhead
+			\rowcolor{lightblue}
+			Fuerza\newline(newton, N)                        & Dinamómetro
+			                                                 & Mide fuerzas por la
+			deformación de un resorte calibrado (o de un sensor en los
+			modelos digitales). Se usa para conocer fuerzas de tracción o de sujeción,
+			por
+			ejemplo la necesaria para extraer una pieza de un útil.
+			\\
+			\rowcolor{lightblue}
+			                                                 & Celda de carga
+			                                                 & Transductor con galgas
+			extensométricas que convierte la deformación de un
+			elemento metálico en una señal eléctrica proporcional a la fuerza. Está
+			integrada en prensas, balanzas industriales y máquinas de ensayo.
+			\\
+			\rowcolor{lightblue}
+			                                                 & Máquina universal de
+			ensayos                                          & Aplica cargas
+			controladas de tracción, compresión o flexión y registra fuerza frente a
+			deformación, con lo que se determinan resistencia y ductilidad de los
+			materiales.
+			\\
+			Presión\newline(pascal, Pa)                      & Manómetro de Bourdon
+			                                                 & Un tubo curvo elástico
+			se deforma con la presión interna y mueve una aguja
+			sobre una escala. Es el instrumento típico para circuitos neumáticos e
+			hidráulicos, compresores y prensas.
+			\\
+			                                                 & Transductor de presión
+			                                                 & Sensor (normalmente
+			piezorresistivo) que entrega una
+			señal eléctrica proporcional a la presión, apto para registro continuo y
+			control
+			automático de procesos.
+			\\
+			                                                 & Vacuómetro
+			                                                 & Mide presiones
+			inferiores a la atmosférica. Se usa en sistemas
+			de sujeción por vacío, en moldeo y en procesos de desgasificado.
+			\\
+			\rowcolor{lightblue}
+			Par\newline(newton metro, N$\cdot$m)             & Llave dinamométrica
+			                                                 & Permite apretar
+			pernos con un par especificado y avisa (con un clic o una indicación) al
+			alcanzarlo. Es imprescindible en ensamble para no sobre-apretar ni dejar
+			juntas
+			flojas.
+			\\
+			\rowcolor{lightblue}
+			                                                 & Destornillador
+			dinamométrico                                    & Versión de menor
+			capacidad para
+			tornillería pequeña y componentes sensibles, como conjuntos electrónicos o
+			mecánicos de precisión.
+			\\
+			\rowcolor{lightblue}
+			                                                 & Sensor (transductor) de
+			par                                              & Mide el par transmitido
+			por un eje
+			mediante galgas o principios magnetoelásticos. Se usa en bancos de prueba
+			de
+			motores, husillos y herramientas.
+			\\
+			Velocidad angular\newline(rad/s; en taller, rpm) & Tacómetro óptico o de
+			contacto                                         & Indica las revoluciones
+			por minuto de un husillo, eje o disco
+			abrasivo. Sirve para ajustar la velocidad de corte y verificar que una
+			máquina
+			gira a la velocidad programada.
+			\\
+			                                                 & Estroboscopio
+			                                                 & Emite destellos a
+			frecuencia ajustable; cuando esta coincide con la del giro,
+			el objeto parece detenido. Permite medir frecuencia de rotación o de
+			vibración
+			sin contacto.
+			\\
+			                                                 & Encoder rotativo
+			                                                 & Genera pulsos por
+			vuelta y se usa en máquinas CNC para realimentar posición y
+			velocidad de ejes y husillos.
+			\\
+			\rowcolor{lightblue}
+			Volumen\newline(metro cúbico, m$^3$)             & Probeta graduada
+			                                                 & Recipiente con escala
+			para medir volúmenes de líquidos como refrigerantes,
+			aceites de corte o soluciones de limpieza.
+			\\
+			\rowcolor{lightblue}
+			                                                 & Pipeta / bureta
+			                                                 & Permite dosificar o
+			trasvasar volúmenes pequeños con mayor
+			exactitud que la probeta, por ejemplo al preparar mezclas o reactivos de
+			laboratorio.
+			\\
+			\rowcolor{lightblue}
+			                                                 & Matraz aforado
+			                                                 & Recipiente calibrado
+			para un único volumen, empleado al preparar soluciones de
+			concentración conocida.
+			\\
+			Tensión eléctrica\newline(voltio, V)             & Multímetro digital
+			                                                 & Mide tensión, y también
+			corriente y resistencia. Se usa para diagnosticar
+			circuitos de máquinas, sensores y fuentes de alimentación.
+			\\
+			                                                 & Voltímetro
+			                                                 & Instrumento dedicado a
+			medir diferencias de potencial; se
+			conecta en paralelo con el elemento a medir y es común en tableros de
+			control.
+			\\
+			                                                 & Osciloscopio
+			                                                 & Muestra la forma de
+			onda de una tensión en el tiempo, lo que permite analizar
+			ruido, frecuencia y señales de sensores y variadores.
+			\\
+		\end{longtable}}
+
+\subsection*{B. Identifique y explique 5 instrumentos de medición usados en un
+	laboratorio de manufactura}
+
+\begin{enunciado}
+	B.- Identifica y explique 5 instrumentos de medición que se usan en un
+	laboratorio de manufactura.
+\end{enunciado}
+
+\subsubsection*{1. Pie de rey (vernier)}
+Mide longitudes exteriores, interiores y profundidades con resolución típica de
+$\SI{0.05}{\milli\metre}$ (o $\SI{0.02}{\milli\metre}$ en algunos modelos). Es
+el instrumento de uso más general del taller: sirve para el control dimensional
+rápido de piezas mecanizadas, para verificar diámetros y para comprobar
+escalones, como se hizo en este laboratorio.
+
+\subsubsection*{2. Micrómetro de exteriores}
+Se basa en un tornillo de paso conocido y alcanza resolución de
+$\SI{0.01}{\milli\metre}$ (o $\SI{0.001}{\milli\metre}$ en modelos digitales).
+Se emplea para medir diámetros de ejes, espesores de placas y otras dimensiones
+donde la tolerancia es estrecha. Cada micrómetro cubre un rango de
+\SI{25}{\milli\metre} y se elige el que contenga la dimensión, por ejemplo
+0--25, 25--50 mm.
+
+\subsubsection*{3. Reloj comparador}
+Instrumento de comparación: no mide la dimensión absoluta, sino la
+\emph{desviación} respecto de un valor de referencia. Un palpador desplaza un
+mecanismo de engranajes o un sensor que mueve la aguja, con resolución típica de
+$\SI{0.01}{\milli\metre}$. Montado en un soporte magnético, se usa para
+comprobar planitud, paralelismo, excentricidad y alabeo, y para centrar piezas
+en un torno o en una fresadora.
+
+\subsubsection*{4. Bloques patrón}
+Piezas de acero o cerámica de caras paralelas y espesor calibrado con alta
+exactitud, que pueden adherirse entre sí para formar longitudes específicas. No
+miden por sí mismos: son \emph{patrones} con los que se calibran y verifican
+vernier, micrómetros y comparadores, y con los que se ajusta el cero de un
+comparador. Aseguran la trazabilidad de las mediciones del taller.
+
+\subsubsection*{5. Rugosímetro}
+Un palpador de punta muy fina recorre la superficie y convierte las
+irregularidades en una señal eléctrica, de la que se calculan parámetros como la
+rugosidad media $R_a$ (en \si{\micro\metre}). Se usa para verificar que el
+acabado superficial logrado por torneado, fresado o rectificado cumple lo
+especificado en el plano.
+
+\medskip
+Además de estos instrumentos, un laboratorio de manufactura suele contar con
+calibres pasa/no pasa, durómetros, proyectores de perfiles y máquinas de
+medición por coordenadas (CMM).
+
+\subsection*{C. Mediciones en un proceso de torneado}
+
+\begin{enunciado}
+	C.- Cuando usted realice un proceso de torneado, ¿qué mediciones puede
+	realizar?
+	Explique por qué.
+\end{enunciado}
+
+En el torneado la pieza gira y la herramienta avanza, por lo que se miden tanto
+las \emph{dimensiones de la pieza} como los \emph{parámetros del proceso}. La
+Tabla~\ref{tab:torneado} las resume.
+
+\begin{table}[!htb]
+	\centering
+	\caption{Mediciones posibles en un proceso de torneado}\label{tab:torneado}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash\bfseries}p{3.2cm}
+			>{\raggedright\arraybackslash}p{3.6cm} X}
+		\rowcolor{darkblue}
+		\encab{Medición}                                & \encab{Instrumento}
+		                                                & \encab{¿Por qué se mide?}
+		\\
+		Diámetros exteriores                            & Vernier, micrómetro de
+		exteriores                                      & Es la dimensión
+		principal: se compara con el plano para decidir si se necesita otra pasada o
+		si
+		la pieza ya está dentro de tolerancia.
+		\\
+		Diámetros interiores (agujeros)                 & Vernier con mordazas
+		interiores,
+		micrómetro de interiores, calibre de interiores & Verifica el mandrinado y
+		el
+		ajuste con el eje que se acoplará.
+		\\
+		Longitudes y escalones                          & Vernier, profundímetro
+		                                                & Controla las cotas
+		axiales, hombros y ranuras.
+		\\
+		Excentricidad y alabeo                          & Reloj comparador con base
+		magnética
+		                                                & Antes de cortar, se
+		comprueba que la pieza esté centrada en el plato; de lo
+		contrario el diámetro no será concéntrico.
+		\\
+		Rugosidad superficial                           & Rugosímetro
+		                                                & El acabado depende del
+		avance y del radio
+		de punta de la herramienta; se
+		comprueba que cumpla el plano.
+		\\
+		Ángulos y conos                                 & Goniómetro, regla de senos
+		                                                & Verifica chaflanes y
+		conicidad.
+		\\
+		Roscas                                          & Peine de roscas,
+		micrómetro de roscas,
+		calibres pasa/no pasa                           & Comprueba paso y diámetro
+		para
+		asegurar que la rosca ensamble.
+		\\
+		Velocidad de giro                               & Tacómetro
+		                                                & Permite calcular la
+		velocidad de corte real y ajustarla al material y a la
+		herramienta.
+		\\
+	\end{tabularx}
+\end{table}
+
+Los parámetros del proceso se relacionan con las dimensiones medidas. La
+velocidad de corte $v_c$ depende del diámetro $D$ (en mm) y de la velocidad de
+giro $n$ (en rpm), y la rugosidad teórica $R_a$ depende del avance $f$ y del
+radio de punta $r_\varepsilon$ de la herramienta (ambos en mm):
+\[
+	v_c = \frac{\pi\,D\,n}{1000}\ \ [\text{m/min}],
+	\qquad
+	R_a \approx \frac{f^{2}}{32\,r_\varepsilon}\times 1000\ \ [\si{\micro\metre}]
+\]
+Por ejemplo, para $D=\SI{50}{\milli\metre}$ y $n = 800$ rpm, $v_c = \pi\cdot
+	50\cdot 800/1000 \approx \SI{125.7}{\metre\per\minute}$. Otra relación útil es
+que, al dar una profundidad de corte $a_p$ (medida en el radio), el diámetro se
+reduce en $2\,a_p$, por lo que medir el diámetro tras cada pasada permite
+corregir el tambor graduado del carro transversal y compensar el desgaste de la
+herramienta.
+
+\begin{nota}[Seguridad]
+	Las mediciones de dimensiones con vernier o micrómetro deben hacerse con el
+	husillo \textbf{detenido}: medir una pieza en giro es peligroso para el
+	operador
+	y falsea la lectura. Asimismo, antes de arrancar el torno se debe retirar la
+	llave del plato y sujetar el cabello y la ropa suelta.
+\end{nota}
+
+% ======================= 7. ENSAYOS VIRTUALES ========================
+\section{ENSAYOS VIRTUALES}
+
+Los siguientes simuladores gratuitos permiten practicar la lectura de vernier y
+micrómetro en línea y complementan el trabajo realizado en el laboratorio:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+	\item \textbf{Vernier Calipers Model (versión en mm).} Simulador interactivo
+	      del Ministerio de Educación de Singapur / Open Source Physics para
+	      practicar la
+	      lectura de un vernier en escala métrica moviendo las mordazas. \\
+	      \url{https://iwant2study.moe.edu.sg/lookangejss/01_measurement/ejss_model_AAPTVernierCalipermmversion/}
+	\item \textbf{Micrometer Model (pantalla completa).} Simulador de micrómetro
+	      de exteriores en el que se combina la lectura del manguito y del tambor.
+	      \\
+	      \url{https://iwant2study.moe.edu.sg/resources/lookangejss/01_measurement/ejss_model_Micrometer02/}
+	\item \textbf{Practice on Reading a Vernier Caliper (MiniPhysics).}
+	      Explicación paso a paso y entrenador interactivo con lecturas
+	      aleatorias. \\
+	      \url{https://www.miniphysics.com/practice-on-reading-a-vernier-caliper.html}
+	\item \textbf{How to Read a Micrometer Screw Gauge (MiniPhysics).} Guía de
+	      lectura del micrómetro con entrenador interactivo. \\
+	      \url{https://www.miniphysics.com/how-to-read-a-micrometer-screw-gauge.html}
+\end{enumerate}
+
+% ==================== 8. ACCIDENTES RELACIONADOS =====================
+\section{ACCIDENTES RELACIONADOS}
+
+Los errores de medición y de conversión de unidades, así como los descuidos en
+el manejo de máquinas de taller, han producido accidentes graves. Se sugieren
+los siguientes casos y documentos:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+	\item \textbf{Mars Climate Orbiter (1999).} La sonda de la NASA se perdió al
+	      llegar a Marte porque un archivo de software de tierra entregaba datos
+	      de los
+	      propulsores en unidades inglesas (libras-fuerza) cuando el sistema de
+	      navegación
+	      esperaba unidades métricas (newtons). Es un ejemplo de cómo una
+	      conversión mal
+	      gestionada puede echar a perder una misión entera. \\
+	      Comunicado de la NASA:
+	      \url{https://nssdc.gsfc.nasa.gov/planetary/text/mco_pr_19991110.txt} \\
+	      Resumen de \emph{Physics Today}:
+	      \url{https://physicstoday.aip.org/news/mars-climate-orbiter-lost} \\
+	      Informe de la junta de investigación (Fase I):
+	      \url{https://www.dcs.gla.ac.uk/~johnson/Mars/MCO_report.pdf}
+	\item \textbf{«Gimli Glider», vuelo 143 de Air Canada (1983).} Un Boeing 767
+	      se quedó sin combustible en pleno vuelo porque la carga se calculó con
+	      un factor
+	      de conversión incorrecto (libras en lugar de kilogramos). La tripulación
+	      logró
+	      un aterrizaje de emergencia sin víctimas mortales. \\
+	      \url{https://en.wikipedia.org/wiki/Gimli_Glider}
+	\item \textbf{Seguridad en el uso de tornos y máquinas herramienta.} Guía de
+	      la Universidad de Cornell sobre los riesgos de atrapamiento,
+	      protecciones y
+	      precauciones en el torneado, relevantes cuando se miden piezas cerca de
+	      una
+	      máquina. \\
+	      \url{https://ehs.cornell.edu/campus-health-safety/occupational-safety/tool-and-machine-safety/metalworking-lathe-safety}
+\end{enumerate}
+
+\textbf{Riesgos propios del laboratorio de metrología.} Aunque en esta práctica
+no hay maquinaria en movimiento, existen riesgos menores: cortes por bordes o
+rebabas de la pieza, caída de la pieza o de los instrumentos sobre los pies o
+las manos, y daños en los instrumentos por golpes, suciedad u oxidación, que
+alteran su calibración. La medición de una pieza en una máquina siempre debe
+hacerse con la máquina detenida.
+
+% ========================= 9. BIBLIOGRAFÍA ===========================
+\section{BIBLIOGRAFÍA}
+
+\begin{enumerate}[label={[\arabic*]},ref=\arabic*,leftmargin=2.2em,itemsep=5pt]
+	\item\label{b:si} Bureau International des Poids et Mesures. (2019). \emph{Le
+		      Système international d'unités / The International System of Units}
+	      (9.ª ed.).
+	      BIPM. \url{https://www.bipm.org/si-brochure}
+	\item\label{b:vim} Joint Committee for Guides in Metrology. (2012).
+	      \emph{International vocabulary of metrology — Basic and general concepts
+		      and
+		      associated terms (VIM)} (JCGM 200:2012, 3.ª ed.). BIPM.
+	\item\label{b:ley} Congreso de la República del Perú. (1982). \emph{Ley N.º
+		      23560: Sistema Legal de Unidades de Medida del Perú}.
+	      \url{http://www.congreso.gob.pe/ntley/Imagenes/Leyes/23560.pdf}
+	\item\label{b:inacal} Congreso de la República del Perú. (2014). \emph{Ley N.º
+		      30224: Ley que crea el Sistema Nacional para la Calidad y el Instituto
+		      Nacional
+		      de Calidad}.
+	\item Groover, M. P. (2007). \emph{Fundamentos de manufactura moderna:
+		      materiales, procesos y sistemas} (3.ª ed.). McGraw-Hill.
+	\item Kalpakjian, S., \& Schmid, S. R. (2014). \emph{Manufactura, ingeniería y
+		      tecnología} (7.ª ed.). Pearson Educación.
+	\item National Aeronautics and Space Administration. (1999). \emph{Mars
+		      Climate Orbiter Mishap Investigation Board — Phase I Report} y
+	      comunicado de
+	      prensa del 10 de noviembre de 1999.
+	      \url{https://nssdc.gsfc.nasa.gov/planetary/text/mco_pr_19991110.txt}
+	\item Cornell University, Environment, Health and Safety. \emph{Metalworking
+		      Lathe Safety Awareness Guide}.
+	      \url{https://ehs.cornell.edu/campus-health-safety/occupational-safety/tool-and-machine-safety/metalworking-lathe-safety}
+	\item Open Source Physics @ Singapore (Hwang, F.-K., Wee, L. K.).
+	      \emph{Vernier Calipers Model} y \emph{Micrometer Model}.
+	      \url{https://iwant2study.moe.edu.sg/}
+\end{enumerate}
+
+\end{document}

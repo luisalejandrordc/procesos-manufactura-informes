@@ -1,0 +1,1145 @@
+\documentclass[12pt,a4paper]{article}
+
+% ----- Encoding and language -----------------------------------------
+\usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-tabla,es-nodecimaldot, es-noquoting]{babel}
+\usepackage{microtype}
+
+% ----- Page layout --------------------------------------------------- 
+\usepackage[a4paper, left=2.6cm, right=2.6cm, top=2.8cm, bottom=2.6cm,
+headheight=15pt]{geometry}
+\linespread{1.15}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0.5in}
+
+% ----- Colors --------------------------------------------------------
+\usepackage[table]{xcolor}
+\definecolor{darkblue}{HTML}{0B2545}
+\definecolor{mediumblue}{HTML}{1D4E89}
+\definecolor{lightblue}{HTML}{DCE7F3}
+\definecolor{borderblue}{HTML}{B8C7DD}
+\definecolor{lightgray}{HTML}{F5F6F8}
+
+% ----- Packages ------------------------------------------------------
+\usepackage{graphicx,float,booktabs,tabularx,array,multirow,longtable}
+\usepackage{enumitem,amsmath,amssymb,caption,xparse,url}
+\usepackage{siunitx}
+\sisetup{output-decimal-marker={,}, inter-unit-product=\ensuremath{{}\cdot{}}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr,titlesec}
+
+% ----- Header and footer ---------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[L]{\sffamily\footnotesize\bfseries\color{darkblue} Facultad de
+Ingeniería Industrial}
+\fancyfoot[R]{\sffamily\footnotesize\bfseries\color{darkblue}Pag \thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.8pt}
+\renewcommand{\footrule}{{\color{darkblue}\hrule width\headwidth
+height\footrulewidth}}
+
+% ----- Section titles -----------------------------------------------
+\titleformat{\section}
+  {\sffamily\bfseries\Large\color{darkblue}}{\thesection.}{0.6em}{}
+  [{\vspace{-0.6ex}\color{mediumblue}\titlerule[1.3pt]}]
+\titleformat{\subsection}
+  {\sffamily\bfseries\large\color{mediumblue}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\sffamily\bfseries\normalsize\color{darkblue}}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{2.4ex plus 1ex minus .2ex}{1.6ex}
+\titlespacing*{\subsection}{0pt}{2.0ex plus .8ex minus .2ex}{1.0ex}
+\titlespacing*{\subsubsection}{0pt}{1.6ex plus .5ex}{0.6ex}
+\addto\captionsspanish{\renewcommand{\contentsname}{CONTENIDO}}
+
+% ----- Captions and tables ------------------------------------------
+\captionsetup{font=small,labelfont={bf,color=darkblue},labelsep=period,
+              textfont={color=black!80},skip=6pt}
+\renewcommand{\arraystretch}{1.22}
+\setlist{itemsep=2pt,topsep=3pt,parsep=0pt}
+
+% Table header cell (white text on dark blue)
+\newcommand{\encab}[1]{\textcolor{white}{\sffamily\bfseries #1}}
+
+% ----- Text boxes ----------------------------------------------------
+\newtcolorbox{nota}[1][Nota]{colback=lightblue,colframe=mediumblue,coltitle=white,
+  fonttitle=\sffamily\bfseries\small,title=#1,arc=2pt,boxrule=0.6pt,
+  left=7pt,right=7pt,top=4pt,bottom=4pt,breakable}
+\newtcolorbox{enunciado}{colback=lightblue,colframe=darkblue,arc=2pt,boxrule=0pt,
+  leftrule=3pt,left=8pt,right=8pt,top=4pt,bottom=4pt,breakable,fontupper=\sffamily\small}
+
+% ----- Image with placeholder box if file does not exist -------------
+% Usage \image[width][box height]{file}{description}
+\NewDocumentCommand{\image}{O{0.6} O{5cm} m m}{%
+  \IfFileExists{#3}{\includegraphics[width=#1\linewidth]{#3}}{%
+    {\setlength{\fboxsep}{0pt}\fcolorbox{borderblue}{lightgray}{%
+      \parbox[c][#2][c]{#1\linewidth}{\centering\sffamily\small\color{darkblue}%
+      \textbf{[ Insert image
+]}\\[3pt]\texttt{\detokenize{#3}}\\[3pt]\footnotesize #4}}}}}
+
+% ----- Links ---------------------------------------------------------
+\usepackage[colorlinks=true, breaklinks=true, linkcolor=darkblue,
+  urlcolor=mediumblue, citecolor=darkblue,
+  pdftitle={Laboratorio N\textdegree 3: Ensayo de Corte},
+  pdfauthor={Ahon Saenz, Maria Julia; Rey de Castro, Luis Alejandro},
+  pdfsubject={Procesos de Manufactura — UNMSM}]{hyperref}
+\urlstyle{same}
+\makeatletter\g@addto@macro\UrlBreaks{\do\-}\makeatother
+\Urlmuskip=0mu plus 2mu\relax
+\setlength{\emergencystretch}{2.5em}
+\newcommand{\refbib}[1]{[\ref{#1}]}
+\newcommand{\pendiente}[1]{\colorbox{yellow!60}{\textbf{[#1]}}}
+
+% =====================================================================
+\begin{document}
+% =====================================================================
+
+% ===== COVER PAGE ====================================================
+\begin{titlepage}
+	\thispagestyle{empty}
+	\begin{tikzpicture}[remember picture,overlay]
+		\fill[darkblue] (current page.north west) rectangle ($(current page.north
+			east)+(0,-4.4cm)$);
+		\fill[mediumblue] ($(current page.north west)+(0,-4.4cm)$) rectangle
+		($(current page.north east)+(0,-4.65cm)$);
+		\fill[darkblue] (current page.south west) rectangle ($(current page.south
+			east)+(0,1.1cm)$);
+		\node[text=white,align=center,text width=16cm,font=\sffamily] at ($(current
+			page.north)+(0,-2.25cm)$) {%
+			{\Large\bfseries UNIVERSIDAD NACIONAL MAYOR DE SAN MARCOS}\\[5pt]
+			{\small\itshape Universidad del Perú, Decana de América}\\[10pt]
+			{\normalsize\bfseries ESCUELA PROFESIONAL DE INGENIERÍA INDUSTRIAL}};
+	\end{tikzpicture}
+
+	\vspace*{2cm}
+
+	\begin{center}
+		\image[0.22][4.3cm]{img/unmsm-logo.png}{}
+
+		\vspace{0.8cm}
+		{\sffamily\bfseries\color{darkblue}\fontsize{22}{26}\selectfont
+			Laboratorio N\textdegree 3: Ensayo de Corte\par}
+
+		\vspace{0.4cm}
+
+		\begin{tcolorbox}[colback=white,colframe=white,arc=3pt,width=0.9\linewidth,
+				box align=center,left=12pt,right=12pt,top=8pt,bottom=8pt]
+			\centering\sffamily
+			\begin{tabular}{@{}>{\bfseries\color{darkblue}}r@{\hspace{1em}}l@{}}
+				Asignatura: & Procesos de Manufactura (L1-3) \\[5pt]
+				Docente:    & Mg. Ing. Víctor Rosales Urbano \\
+			\end{tabular}
+		\end{tcolorbox}
+
+		\vspace{0.4cm}
+		{\sffamily\bfseries\color{darkblue}\large Integrantes\par}
+		\vspace{5pt}
+		\sffamily\begin{tabular}{@{}l@{\hspace{2.5em}}r@{}}
+			Ahon Saenz, Maria Julia Armida      & (23170001) \\
+			Rey de Castro Rupay, Luis Alejandro & (22170163) \\
+		\end{tabular}
+
+		\vspace{1cm}
+
+		\image[0.3][5.2cm]{img/maju.jpeg}{}
+		\hspace{1.5cm}
+		\image[0.3][5.2cm]{img/luis.jpg}{}
+	\end{center}
+
+	\vfill
+	\begin{center}
+		{\sffamily\bfseries\color{darkblue}\large Lima, 2026\par}
+	\end{center}
+\end{titlepage}
+\setcounter{page}{2}
+
+% ===== CONTENIDO =====================================================
+\tableofcontents
+\newpage
+
+% ===== 1. PRESENTACIÓN ===============================================
+\section{PRESENTACIÓN}
+
+El mecanizado por arranque de viruta es uno de los grupos de procesos más
+importantes de la manufactura: partiendo de una pieza en bruto, una herramienta
+de corte remueve el material sobrante hasta obtener la forma, las dimensiones y
+el acabado que pide el plano. Aunque suele asociarse con máquinas como el torno
+o la fresadora, el principio físico es el mismo cuando la herramienta se mueve a
+mano: un filo penetra en el material, lo deforma por corte y lo separa en forma
+de viruta. Entender ese mecanismo es lo que permite, después, elegir bien la
+herramienta, la velocidad y el fluido de corte.
+
+\vspace{6pt}
+
+En este tercer laboratorio realizamos una operación de aserrado manual:
+cortamos una pieza cilíndrica de hierro (Fe) con un arco de sierra,
+sujetándola en un tornillo de banco. El docente marcó previamente la pieza para
+que la longitud resultante fuera de aproximadamente \SI{70}{\milli\metre}. Los
+datos de la práctica (pieza, herramienta, tiempos e inspección) se anotaron en
+la hoja de registro del laboratorio, cuya información se presenta en la sección
+de resultados.
+
+\vspace{6pt}
+
+La pieza cortada no es un producto final, sino el material de partida de
+la siguiente operación: en la hoja de registro, la operación de destino es el
+torno. Esto ilustra una idea central de la manufactura: cada operación
+recibe una pieza de la anterior y le deja un sobrante (sobreespesor) para
+que la siguiente pueda trabajar. Por eso, aun siendo una operación sencilla, el
+aserrado se registra con el mismo rigor que una operación de máquina.
+
+\vspace{6pt}
+
+\begin{figure}[H]
+	\centering
+	\image[0.75][4.6cm]{img/presentacion.jpeg}{Foto general de la experiencia de
+		laboratorio}
+	\caption{Sistema físico general de la experiencia de laboratorio}
+\end{figure}
+
+% ===== 2. MARCO TEÓRICO ==============================================
+\section{MARCO TEÓRICO}
+
+\subsection{Teoría de corte y mecanizado}
+
+La teoría de corte estudia los fenómenos que ocurren cuando una
+herramienta entra en contacto con un material y produce su separación mediante
+deformación y desprendimiento. Durante este proceso intervienen factores como la
+geometría de la herramienta, las propiedades del material, las fuerzas de corte,
+la fricción y las condiciones de trabajo (Trent \& Wright, 2000).
+
+\vspace{6pt}
+
+El mecanizado es un proceso de manufactura en el que una herramienta de
+corte se utiliza para remover el exceso de material de una pieza, de modo que
+lo que queda tenga la forma deseada. La acción principal consiste en aplicar
+una deformación por corte para formar la viruta y exponer una nueva
+superficie (Groover, 2007).
+
+\vspace{6pt}
+
+Los procesos de remoción de material se agrupan en tres categorías
+(Tabla~\ref{tab:categorias}). El aserrado pertenece a la primera: es un proceso
+de mecanizado convencional en el que una herramienta de múltiples filos, la hoja
+de sierra, remueve material en forma de viruta.
+
+\vspace{6pt}
+
+\begin{table}[!htb]
+	\centering
+	\caption{Categorías básicas de los procesos de remoción de
+		material}\label{tab:categorias}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{l X}
+		\rowcolor{darkblue}
+		\encab{Categoría}       & \encab{Descripción y ejemplos}
+		\\
+		Mecanizado convencional & Una herramienta de corte afilada remueve material
+		en forma de viruta:
+		torneado, fresado, taladrado, limado y aserrado.
+		\\
+		Procesos abrasivos      & Partículas abrasivas duras remueven material:
+		rectificado, lapeado,
+		pulido.
+		\\
+		Procesos no tradicionales
+		                        & Usan energía química, eléctrica, térmica o
+		mecánica sin herramienta
+		de corte convencional: electroerosión (EDM), láser, chorro de agua.
+		\\
+	\end{tabularx}
+\end{table}
+
+\vspace{2pt}
+
+En la práctica realizada, estos principios se aplicaron mediante el aserrado
+manual de una barra maciza de acero de sección circular. La hoja de sierra fue
+desplazada de manera repetitiva sobre una línea previamente trazada hasta
+conseguir la separación del trozo requerido.
+
+\subsection{Mecánica del corte de metales}
+
+En el corte de metales, la herramienta penetra en el material y lo deforma
+plásticamente a lo largo de un plano de corte (o de cizallamiento). El
+material que sale por ese plano forma la viruta, que se desliza sobre la cara de
+ataque de la herramienta. El modelo más usado para analizarlo es el
+corte ortogonal, en el que el filo es perpendicular a la velocidad de
+corte y el problema puede tratarse en dos dimensiones. Cuando el filo está
+inclinado respecto de esa dirección se habla de corte oblicuo, que es
+tridimensional. La Figura~\ref{fig:ortogonal} resume la geometría del corte
+ortogonal.
+
+\vspace{6pt}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[scale=0.9,>=Stealth]
+		\coordinate (A) at (5,0);
+		\coordinate (B) at (2.86,1.5);
+		% pieza de trabajo
+		\filldraw[fill=black!15,draw=darkblue,line width=0.8pt]
+		(0,-1.2) -- (9.5,-1.2) -- (9.5,0) -- (A) -- (B) -- (0,1.5) -- cycle;
+		% viruta
+		\filldraw[fill=lightblue,draw=darkblue,line width=0.8pt]
+		(A) -- (B) -- (3.53,4.01) -- (5.67,2.51) -- cycle;
+		% herramienta
+		\filldraw[fill=mediumblue!35,draw=darkblue,line width=0.8pt]
+		(A) -- (5.88,3.28) -- (8.6,3.28) -- (8.6,0.5) -- cycle;
+		% líneas auxiliares
+		\draw[dashed,mediumblue] (0,0) -- (A);
+		\draw[dashed,mediumblue] (A) -- (5,3.7);
+		% ángulos
+		\draw[darkblue] ($(A)+(180:1.3)$) arc (180:145:1.3);
+		\node[font=\small,darkblue] at ($(A)+(162:1.75)$) {$\phi$};
+		\draw[darkblue] ($(A)+(90:1.7)$) arc (90:75:1.7);
+		\node[font=\scriptsize,darkblue] at ($(A)+(82.5:2.05)$) {$\alpha$};
+		% espesores
+		\draw[<->,darkblue] (1.2,0) -- (1.2,1.5)
+		node[midway,left,font=\small] {$t_0$};
+		\draw[<->,darkblue] (5.336,1.256) -- (2.963,1.892)
+		node[midway,above,sloped,font=\scriptsize] {$t_c$};
+		% velocidad
+		\draw[->,very thick,darkblue] (9.4,3.8) -- (7.6,3.8)
+		node[midway,above,font=\small] {$V$};
+		% rótulos
+		\node[font=\sffamily\scriptsize,darkblue] at (7.3,2.2) {Herramienta};
+		\node[font=\sffamily\scriptsize,darkblue] at (4.35,3.0) {Viruta};
+		\node[font=\sffamily\scriptsize,darkblue] at (7.5,-0.7) {Pieza de trabajo};
+		\node[font=\sffamily\scriptsize,darkblue,align=center] (pc) at (1.3,2.9)
+		{Plano de\\corte};
+		\draw[->,darkblue,thin] (1.6,2.35) -- (3.6,1.0);
+	\end{tikzpicture}
+	\caption{Esquema del corte ortogonal: $t_0$ es el espesor antes del corte,
+		$t_c$ el espesor de la viruta, $\phi$ el ángulo del plano de corte,
+		$\alpha$ el ángulo de ataque y $V$ la velocidad de la
+		herramienta.}\label{fig:ortogonal}
+\end{figure}
+
+\subsection{Aserrado manual}
+
+El aserrado es un proceso de corte en el que una herramienta con múltiples
+dientes elimina material de manera progresiva. Cada diente funciona como un
+pequeño filo que penetra en la pieza y desprende una cantidad de material,
+formando una ranura de corte. La acción sucesiva de los dientes permite
+profundizar esta ranura hasta completar la separación de la pieza (Choudhury,
+2021).
+
+\vspace{6pt}
+
+Para acero, las hojas suelen ser de acero rápido o bimetálicas. El parámetro
+principal de selección es el número de dientes por pulgada (TPI): como criterio
+práctico, debe haber al menos dos o tres dientes en contacto con el material
+en todo momento; por ello, para barra maciza se usan pasos más gruesos (del
+orden de 18 TPI) y para tubos o perfiles delgados, más finos (24 a 32 TPI). La
+pieza se sujeta en un tornillo de banco lo más cerca posible de la línea de
+corte, para reducir la vibración y evitar que la hoja se atasque o se rompa.
+
+\vspace{6pt}
+
+En el aserrado manual, el movimiento de corte es proporcionado por el operario
+mediante carreras de avance y retroceso. Por ello, la técnica utilizada, la
+presión aplicada y la velocidad de las carreras pueden influir en el rendimiento
+de la operación.
+
+\subsection{Formación de viruta}
+
+Una viruta es un fragmento de material residual con forma de lámina curvada o
+espiral que es extraído mediante un cepillo u otras herramientas. Su forma
+depende del material, de la geometría de la herramienta y de las condiciones de
+corte, y se clasifica como se muestra en la Tabla~\ref{tab:virutas}.
+
+\vspace{6pt}
+
+La formación de viruta ocurre cuando el material situado delante del filo de
+corte se deforma hasta separarse de la pieza. En términos generales, el material
+experimenta una deformación plástica localizada y posteriormente se desprende
+debido a la acción de la herramienta.
+
+\vspace{6pt}
+
+\begin{table}[!htb]
+	\centering
+	\caption{Clasificación de las virutas}\label{tab:virutas}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{3.2cm} X}
+		\rowcolor{darkblue}
+		\encab{Según su\ldots} & \encab{Tipos}
+		\\
+		Tipo                   & Discontinua; continua; continua con protuberancias.
+		\\
+		Clase                  & Plástica; cortada; de arranque.
+		\\
+		Forma                  & Agujas; desmenuzadas; bastoncitos; trozos espirales o
+		helicoidales; espirales netas; trozos cortos de cinta; hélices cortas o
+		largas,
+		estrechas o anchas; virutas de sesgo rectilíneo.
+		\\
+	\end{tabularx}
+\end{table}
+
+\vspace{2pt}
+
+En el caso de la sierra manual, cada diente remueve una pequeña cantidad de
+material durante la carrera de corte. La repetición de este proceso genera
+progresivamente la ranura que permite separar la pieza. Por ello, aunque el
+corte se realice manualmente, se presentan los mismos fenómenos básicos de
+remoción de material estudiados en la teoría de corte (Choudhury, 2021).
+
+\subsection{Herramientas de corte y desgaste}
+
+Las herramientas de corte se clasifican según varios criterios
+(Tabla~\ref{tab:clasif}). La herramienta utilizada en este laboratorio fue una
+hoja bimetálica para metales montada en un arco de sierra. Sus dientes
+constituyen los elementos encargados de penetrar en el acero y producir el
+desprendimiento del material.
+
+\vspace{6pt}
+
+\begin{table}[!htb]
+	\centering
+	\caption{Clasificación de las herramientas de corte}\label{tab:clasif}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{4.3cm} X}
+		\rowcolor{darkblue}
+		\encab{Criterio}           & \encab{Clases}
+		\\
+		Según el número de filos   & De un filo; de doble filo o en hélice; de filos
+		múltiples.
+		\\
+		Según el material          & Acero de herramientas (WS); aceros de
+		herramientas aleados (SS);
+		metales duros aleados (HS); diamantes.
+		\\
+		Por el movimiento de corte & Fijo; contra el material; en contra dirección.
+		\\
+		Por el tipo de viruta      & Viruta continua; en forma de coma; polvo sin
+		forma definida.
+		\\
+	\end{tabularx}
+\end{table}
+
+\vspace{2pt}
+
+Durante el corte, los dientes están sometidos a esfuerzos y fricción. Como
+consecuencia, puede producirse desgaste progresivo de la herramienta, lo que
+reduce su capacidad de corte y puede aumentar el esfuerzo requerido para avanzar
+sobre el material (Trent \& Wright, 2000). Por esta razón, antes de iniciar una
+operación de aserrado es importante
+comprobar que la hoja se encuentre correctamente tensada y que sus dientes estén
+en condiciones adecuadas.
+
+\subsection{Condiciones de corte}
+
+Las condiciones de corte son los parámetros que el operario o el programador
+fija para una operación. Los conceptos principales que intervienen en el proceso
+son:
+
+\vspace{2pt}
+
+\begin{itemize}
+	\item \textbf{Metal sobrante (sobreespesor):} diferencia entre el espesor
+	      inicial $E$ y el final $e$ de la pieza, $T=E-e$ (mm).
+	\item \textbf{Profundidad de corte:} espesor de material removido en una
+	      pasada. En el cilindrado, $t=\dfrac{D_f-D_i}{2}$, donde $D_i$ y $D_f$
+	      son
+	      los diámetros inicial y final (mm).
+	\item \textbf{Velocidad de avance:} desplazamiento de la herramienta respecto
+	      de la pieza por unidad de giro, de tiempo o de carrera.
+	\item \textbf{Velocidad de corte:} velocidad relativa entre el filo y el
+	      material en el punto más desfavorable, $V_c=\pi D n$ (m/min o ft/min),
+	      con $D$ el diámetro correspondiente (en metros) y $n$ las revoluciones
+	      por
+	      minuto de la pieza o de la herramienta.
+\end{itemize}
+
+Para producir el corte es necesario aplicar una fuerza que permita que los
+dientes de la hoja penetren en el material. Esta fuerza depende de factores como
+las propiedades del acero, la geometría de los dientes, la cantidad de material
+que se remueve y las condiciones de contacto entre la herramienta y la pieza.
+
+\vspace{6pt}
+
+En el aserrado manual, la fuerza es proporcionada directamente por el operario.
+Por ello, aplicar la presión principalmente durante la carrera activa y mantener
+un ritmo constante permite aprovechar mejor el movimiento de la herramienta. Los
+estudios de mecánica del corte consideran las fuerzas generadas durante la
+interacción entre herramienta y pieza como uno de los aspectos fundamentales
+para analizar el proceso de remoción de material (Choudhury, 2021).
+
+\subsection{Sujeción y precisión del corte}
+
+La sujeción de la pieza es fundamental para mantenerla estable durante el
+proceso. Una pieza correctamente fijada disminuye los movimientos y facilita que
+la hoja siga la línea previamente trazada.
+
+\vspace{6pt}
+
+\begin{table}[!htb]
+	\centering
+	\caption{Principales elementos que intervienen en el aserrado manual}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{
+			>{\raggedright\arraybackslash}l
+			>{\raggedright\arraybackslash}X
+		}
+		\rowcolor{darkblue}
+		\encab{Elemento}  &
+		\encab{Función en el proceso}
+		\\
+		Pieza de trabajo  &
+		Material sobre el cual se realiza el corte.
+		\\
+		Hoja de sierra    &
+		Penetra en el material y remueve pequeñas cantidades de acero mediante sus
+		dientes.
+		\\
+		Arco de sierra    &
+		Permite sujetar y tensar la hoja y transmitir el movimiento.
+		\\
+		Tornillo de banco &
+		Mantiene inmovilizada la pieza durante el corte.
+		\\
+		Línea de trazado  &
+		Sirve como referencia para controlar la dirección del corte.
+		\\
+	\end{tabularx}
+\end{table}
+
+\vspace{2pt}
+
+La precisión del corte es importante debido a que la pieza será utilizada
+posteriormente en una operación de torneado. Por ello, después del aserrado se
+realizó el desbarbado y la verificación de la pieza antes de considerarla
+habilitada.
+
+% ===== 3. MATERIALES Y EQUIPOS =======================================
+\section{MATERIALES Y EQUIPOS}
+
+La práctica consistió en habilitar un trozo de barra maciza de acero de sección
+circular mediante aserrado manual, utilizando un arco de sierra y un tornillo de
+banco para mantener fija la pieza. El objetivo fue obtener un trozo de
+aproximadamente \SI{70}{\milli\metre} de longitud, considerando el material
+adicional necesario para el posterior mecanizado en torno. La operación se
+realizó completamente de forma manual sobre el banco de trabajo, sin utilizar
+una máquina de corte. Para controlar las dimensiones y la dirección del corte se
+emplearon instrumentos de medición y trazado.
+
+
+\subsection{Pieza de trabajo}
+
+El material utilizado fue una barra maciza de acero (Fe) de sección circular,
+procedente del almacén del taller, identificada en la hoja de registro como
+pieza N\textdegree 01. La barra tenía una sección de \SI{1}{in} y
+una longitud inicial de \SI{6000}{\milli\metre}. De ella se habilitó un trozo de
+aproximadamente 70 mm de longitud.
+
+\begin{figure}[H]
+	\centering
+	\image[0.5][4.6cm]{img/pieza_marcada.jpeg}{FOTO 1: pieza cilíndrica de Fe}
+	\caption{Pieza de Fe con la marca de corte trazada por el docente.}
+\end{figure}
+
+\subsection{Herramientas de corte y sujeción}
+
+Para realizar el corte se utilizó un arco de sierra para metales, equipado con
+una hoja bimetálica de 300 mm (12"). El arco permitió mantener la hoja tensada y
+transmitir el movimiento generado por el operario. La barra fue fijada mediante
+un tornillo de banco o morsa mecánica, evitando que se desplazara durante el
+corte.
+
+\begin{table}[!htb]
+	\centering
+	\caption{Herramientas utilizadas durante la práctica}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{
+			>{\raggedright\arraybackslash}l
+			>{\raggedright\arraybackslash}X
+			>{\raggedright\arraybackslash}X
+		}
+		\rowcolor{darkblue}
+		\encab{Herramienta}                                         &
+		\encab{Especificación}                                      &
+		\encab{Función}
+		\\
+		Arco de sierra para metales                                 &
+		Bastidor regulable, mango tipo pistola y tensor de mariposa &
+		Sujetar y tensar la hoja durante el corte.
+		\\
+		Hoja de sierra bimetálica                                   &
+		300 mm (12")                                                &
+		Realizar el corte y remover material mediante sus dientes.
+		\\
+		Tornillo de banco                                           &
+		Mordazas paralelas, fijado al banco                         &
+		Sujetar e inmovilizar la barra.
+		\\
+	\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\image[0.65][4.6cm]{img/arco_sierra.jpeg}{FOTO 2: arco de sierra con su hoja}
+	\caption{Arco de sierra y hoja utilizada en el laboratorio.}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\image[0.85][4.6cm]{img/tornillo_banco.jpeg}{FOTO 3: tornillo de banco con la
+		pieza sujeta}
+	\caption{Tornillo de banco con la pieza sujeta para el aserrado.}
+\end{figure}
+
+\subsection{Instrumentos de trazado y verificación}
+Antes de realizar el corte fue necesario determinar la longitud de la pieza y
+marcar la zona donde se realizaría el aserrado. Para ello se utilizó un vernier
+o pie de rey, un rayador de punta de carburo y una escuadra de precisión
+(realizado por el docente).
+
+\vspace{6pt}
+
+El vernier permitió medir la pieza y establecer la longitud requerida. El
+rayador permitió marcar la línea de corte sobre las caras de la barra, mientras
+que la escuadra facilitó el trazado perpendicular y posteriormente la
+verificación de la superficie obtenida.
+
+\begin{table}[!htb]
+	\centering
+	\caption{Instrumentos de trazado y verificación}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{
+			>{\raggedright\arraybackslash}l
+			>{\raggedright\arraybackslash}X
+			>{\raggedright\arraybackslash}X
+		}
+		\rowcolor{darkblue}
+		\encab{Instrumento}                                               &
+		\encab{Especificación}                                            &
+		\encab{Función}
+		\\
+		Vernier o pie de rey                                              &
+		Rango 0–150 mm, resolución 0,05 mm                                &
+		Medir la sección y determinar la longitud de corte
+		\\
+		Tiza color anaranjado                                             &
+		Roca sedimentaria compuesta principalmente de carbonato de calcio &
+		Marcar la línea de corte sobre la barra
+		\\
+	\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\image[0.45][4.6cm]{img/instrumentos.png}{Instrumentos utilizados para el
+		trazado y verificación}
+	\caption{Instrumentos utilizados para el trazado y
+		verificación.}\label{fig:instrumentos}
+\end{figure}
+
+\subsection{Equipos de protección personal}
+
+Debido a que la operación fue realizada manualmente y existía contacto con una
+herramienta de corte, aristas metálicas y rebabas, se utilizaron equipos de
+protección personal para reducir los riesgos durante la práctica.
+
+\begin{table}[H]
+	\centering
+	\caption{Equipos de protección personal utilizados}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{
+			>{\raggedright\arraybackslash}l
+			>{\raggedright\arraybackslash}X
+		}
+		\rowcolor{darkblue}
+		\encab{EPP}                &
+		\encab{Riesgo que controla}
+		\\
+		Guantes de seguridad       &
+		Cortes, aristas vivas y contacto con rebabas.
+		\\
+		Botas con puntera de acero &
+		Caída de la barra o de la pieza cortada.
+		\\
+		Mandil o guardapolvo       &
+		Contacto con virutas, grasa y suciedad.
+		\\
+	\end{tabularx}
+\end{table}
+
+% ===== 4. PROCEDIMIENTO ==============================================
+\section{PROCEDIMIENTO}
+
+La secuencia de trabajo se resume en la Figura~\ref{fig:flujo} y se detalla a
+continuación.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+	\item Se completaron los datos generales de la hoja de registro: pieza,
+	      práctica, material, operación, herramienta, tiempo estimado y
+	      operaciones de origen y destino.
+	\item El docente marcó sobre la pieza de Fe la longitud de corte, de
+	      aproximadamente \SI{70}{\milli\metre}.
+	\item Se fijó la pieza en el tornillo de banco, con la marca de corte
+	      accesible para la hoja y lo más cerca posible de las mordazas
+	      (Figura~\ref{fig:proceso}).
+	\item Se anotó la hora de inicio (17:58) y se realizó el corte con el arco
+	      de sierra siguiendo la marca, hasta separar el tramo de la pieza.
+	\item Al terminar se anotó la hora final (18:22), se calculó el tiempo
+	      total de la operación y se realizó la medición de longitud y peso.
+	\item El docente inspeccionó la pieza y firmó el campo de inspección de la
+	      hoja de registro.
+\end{enumerate}
+
+\vspace{6pt}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[node distance=5mm,
+			caja/.style={rectangle,rounded
+					corners=3pt,fill=darkblue,text=white,font=\sffamily\scriptsize\bfseries,
+					minimum height=1.15cm,minimum width=2.3cm,align=center,inner sep=3pt},
+			flecha/.style={-{Stealth[length=2.2mm]},thick,color=mediumblue}]
+		\node[caja] (a) {Recibir pieza\\marcada};
+		\node[caja,right=of a] (b) {Sujetar en\\tornillo de banco};
+		\node[caja,right=of b] (c) {Aserrar con\\arco de sierra};
+		\node[caja,right=of c] (d) {Registrar\\resultados};
+		\node[caja,right=of d] (e) {Inspección\\del docente};
+		\draw[flecha] (a)--(b); \draw[flecha] (b)--(c); \draw[flecha] (c)--(d);
+		\draw[flecha] (d)--(e);
+	\end{tikzpicture}
+	\caption{Secuencia del procedimiento experimental.}\label{fig:flujo}
+\end{figure}
+
+\vspace{6pt}
+
+\begin{figure}[H]
+	\centering
+	\image[0.65][4.6cm]{img/proceso_aserrado.jpeg}{FOTO 4: operación de aserrado
+		en curso (pieza en el tornillo de banco y arco de sierra)}
+	\caption{Aserrado manual de la pieza de Fe.}\label{fig:proceso}
+\end{figure}
+
+% ===== 5. ELABORACIÓN DE RESULTADOS ==================================
+\section{ELABORACIÓN DE RESULTADOS}\label{sec:resultados}
+
+\subsection{Hoja de registro de la práctica}
+
+La Figura~\ref{fig:hoja} muestra la hoja de registro llenada durante el
+laboratorio, y la Tabla~\ref{tab:hoja} transcribe sus datos.
+
+\begin{figure}[H]
+	\centering
+	\image[0.85][6cm]{img/hoja_datos.png}{Hoja de registro de la práctica}
+	\caption{Hoja de registro de la práctica N\textdegree 03 (original
+		manuscrita).}\label{fig:hoja}
+\end{figure}
+
+\begin{table}[!htb]
+	\centering
+	\caption{Datos de la hoja de registro (transcripción)}\label{tab:hoja}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{>{\bfseries\raggedright\arraybackslash}p{5.2cm}
+			X}
+		\rowcolor{darkblue}
+		\encab{Campo}            & \encab{Dato
+			                           registrado}
+		\\
+		Horario                  & Lab 03 (Lunes 17:20 - 19:00)
+		\\
+		Fecha                    & 21/09/2026
+		\\
+		N\textdegree{} de pieza  & 01
+		\\
+		Descripción del artículo & Fe, Ø \SI{1}{in} $\times$ \SI{69}{\milli\metre}
+		\\
+		Práctica / fecha         & 03 \ -- \ 21/09/2026
+		\\
+		Tipo de material         & Fe
+		\\
+		Peso final               & Approx. \SI{340}{g}
+		\\
+		Operación actual         & Aserrado
+		\\
+		Máquina                  & -- (operación manual, sin máquina)
+		\\
+		Herramienta              & Arco con hoja de sierra
+		\\
+		Tiempo estimado          & \SI{30}{\minute}
+		\\
+		Operación origen         & Aserrado
+		\\
+		Operación destino        & Torno
+		\\
+		Tiempo de inicio         & 17:58
+		\\
+		Tiempo final             & 18:22
+		\\
+		Tiempo total             & \SI{24}{\minute}
+		\\
+		Inspección               & Mg. Ing. Víctor Rosales Urbano
+		\\
+	\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\image[0.55][4.6cm]{img/pieza_cortada.jpeg}{FOTO 5: tramo de Fe cortado (y,
+		si se conserva, la viruta o limalla generada)}
+	\caption{Pieza cortada al finalizar la operación.}
+\end{figure}
+
+\subsection{Análisis de tiempos}
+
+El tiempo total anotado (\SI{24}{\minute}) es consistente con las horas de
+inicio y fin: $18{:}22 - 17{:}58 = \SI{24}{\minute}$. Comparado con el tiempo
+estimado de \SI{30}{\minute}, la operación se completó la operación terminó
+dentro de lo previsto (Tabla~\ref{tab:tiempos}, Figura~\ref{fig:tiempos}).
+El tiempo real fue un 20\,\% menor que el estimado. Sin embargo, con una sola
+pieza no es posible generalizar este resultado: depende de la destreza del
+operario, del estado de la hoja y del diámetro de la pieza.
+
+\begin{table}[!htb]
+	\centering
+	\caption{Tiempo estimado frente a tiempo real}\label{tab:tiempos}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabular}{l r}
+		\rowcolor{darkblue}
+		\encab{Indicador}                 & \encab{Valor}      \\
+		Tiempo estimado                   & \SI{30}{\minute}   \\
+		Tiempo real (18:22 $-$ 17:58)     & \SI{24}{\minute}   \\
+		Diferencia (real $-$ estimado)    & $-\SI{6}{\minute}$ \\
+		Tiempo real / tiempo estimado     & 80\,\%             \\
+		Reducción respecto de lo estimado & 20\,\%             \\
+	\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				ybar, width=0.62\linewidth, height=5.6cm,
+				symbolic x coords={Estimado,Real}, xtick=data,
+				enlarge x limits=0.55, ymin=0, ymax=36,
+				ytick={0,10,20,30}, ylabel={Tiempo (min)},
+				bar width=30pt, ymajorgrids, grid style={borderblue!70},
+				nodes near coords, nodes near coords style={font=\sffamily\small},
+				label style={font=\sffamily\small},
+				tick label style={font=\sffamily\small},
+				axis x line*=bottom, axis y line*=left]
+			\addplot[fill=mediumblue,draw=darkblue] coordinates {(Estimado,30)
+					(Real,24)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Tiempo estimado y tiempo real de la operación de
+		aserrado.}\label{fig:tiempos}
+\end{figure}
+
+% ===== 6. CUESTIONARIO ===============================================
+\section{CUESTIONARIO}
+
+\subsection*{1. ¿Qué elementos de mecanizado existen?}
+
+En toda operación de mecanizado intervienen los siguientes elementos:
+
+\begin{itemize}
+	\item \textbf{Máquina-herramienta:} proporciona el movimiento y la energía del
+	      corte (torno, fresadora, taladro, cepillo, sierra mecánica). En nuestro
+	      laboratorio no hubo máquina: la energía la puso el operario.\\[-10pt]
+	\item \textbf{Herramienta de corte:} el elemento con filo que remueve el
+	      material (cuchilla, fresa, broca, hoja de sierra). Se define por su
+	      material, su geometría y su número de filos.\\[-10pt]
+	\item \textbf{Pieza de trabajo:} el material a mecanizar, con su forma inicial
+	      y el metal sobrante que debe removerse.\\[-10pt]
+	\item \textbf{Dispositivos de sujeción:} mantienen la pieza (o la herramienta)
+	      en posición: mandril, plato, prensa o tornillo de banco.\\[-10pt]
+	\item \textbf{Movimientos de la operación:} movimiento principal o de corte,
+	      movimiento de avance y movimiento de profundidad o penetración.\\[-10pt]
+	\item \textbf{Fluido de corte:} lubricante o refrigerante que reduce la
+	      fricción y el calor en la zona de corte.\\[-10pt]
+	\item \textbf{Viruta:} el material removido, resultado de la operación.
+\end{itemize}
+
+\subsection*{2. ¿Qué tipos de cortes existen?}
+
+Según los criterios de la sesión, los cortes pueden clasificarse de la siguiente
+manera:
+
+\begin{itemize}
+	\item \textbf{Por la geometría del corte:} \emph{ortogonal}, en el que el filo
+	      es perpendicular a la velocidad de corte y el problema es
+	      bidimensional; y \emph{oblicuo}, en el que el filo está inclinado y el
+	      problema es tridimensional.\\[-10pt]
+	\item \textbf{Por el número de filos de la herramienta:} de un filo
+	      (cuchilla de torno), de doble filo o en hélice (broca) y de filos
+	      múltiples (fresa, hoja de sierra).\\[-10pt]
+	\item \textbf{Por el tipo de viruta:} continua, continua con protuberancias
+	      (filo recrecido) y discontinua.\\[-10pt]
+	\item \textbf{Por la clase de viruta:} plástica, cortada y de
+	      arranque.\\[-10pt]
+	\item \textbf{Por la operación:} torneado, fresado, taladrado, aserrado, entre
+	      otras. El aserrado realizado en este laboratorio es un corte con una
+	      herramienta de filos múltiples y movimiento alternativo.
+\end{itemize}
+
+\subsection*{3. ¿Cuáles son los parámetros de corte?}
+
+Los parámetros de corte son la velocidad de corte, el avance y la profundidad de
+corte (Tabla~\ref{tab:parametros}). Junto con el metal sobrante, son los
+conceptos principales del proceso según la sesión.
+
+\begin{table}[!htb]
+	\centering
+	\caption{Parámetros de corte}\label{tab:parametros}
+	\small
+	\rowcolors{2}{white}{lightblue}
+	\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{3.6cm}
+			>{\raggedright\arraybackslash}p{3.6cm} X}
+		\rowcolor{darkblue}
+		\encab{Parámetro}    & \encab{Expresión / unidad}        &
+		\encab{Significado}
+		\\
+		Velocidad de corte   & $V_c=\pi D n$ (m/min)             & Velocidad
+		relativa entre el filo y
+		el material en el punto más desfavorable ($D$ en m; $n$ en rpm).
+		\\
+		Avance               & mm/rev, mm/diente o mm/carrera    & Desplazamiento de
+		la herramienta
+		respecto de la pieza por unidad de giro o de carrera.
+		\\
+		Profundidad de corte & mm; en cilindrado $t=(D_f-D_i)/2$ & Espesor de
+		material removido
+		en una pasada.
+		\\
+		Metal sobrante       & $T=E-e$ (mm)                      & Material total
+		que debe
+		removerse entre la pieza en bruto y la pieza final.
+		\\
+	\end{tabularx}
+\end{table}
+
+\subsection*{4. ¿Cuáles son los componentes principales para el corte?}
+
+El corte requiere, como mínimo, una \emph{herramienta}, una \emph{pieza} y un
+\emph{movimiento relativo} entre ambas. Los componentes de la herramienta y del
+sistema que se estudian son los siguientes:
+
+\begin{itemize}
+	\item \textbf{Superficie de desprendimiento o de ataque:} cara sobre la que
+	      se desliza la viruta.\\[-10pt]
+	\item \textbf{Filo principal y filo secundario de corte:} aristas que separan
+	      el material.\\[-10pt]
+	\item \textbf{Caras de incidencia principal y secundaria:} caras que
+	      enfrentan la superficie recién cortada; su ángulo evita el
+	      roce.\\[-10pt]
+	\item \textbf{Punta de la herramienta:} unión de los dos filos.\\[-10pt]
+	\item \textbf{Mango y plaquita:} cuerpo de la herramienta y el inserto de
+	      corte
+	      que se fija a él.\\[-10pt]
+	\item \textbf{Movimiento primario (de corte), movimiento de avance y
+		      profundidad,} que definen la trayectoria de la herramienta.\\[-10pt]
+	\item \textbf{Viruta:} material removido que sale por la cara de ataque.
+\end{itemize}
+
+\subsection*{5. ¿Cuáles son las tres categorías básicas de procesos de remoción
+	de material?}
+
+Son el \textbf{mecanizado convencional} (corte con herramienta de filo, como
+torneado, fresado, taladrado y aserrado), los \textbf{procesos abrasivos}
+(rectificado, lapeado, pulido) y los \textbf{procesos no tradicionales}
+(electroerosión, láser, chorro de agua y otros que remueven material sin una
+herramienta de corte convencional). Ver Tabla~\ref{tab:categorias}.
+
+\subsection*{6. Indique algunas razones por las que el mecanizado es comercial y
+	tecnológicamente importante}
+
+Según Groover, el mecanizado es importante porque:
+
+\begin{itemize}
+	\item \textbf{Es aplicable a una gran variedad de materiales:} metales,
+	      plásticos y cerámicos, con las herramientas adecuadas.\\[-10pt]
+	\item \textbf{Puede generar casi cualquier forma geométrica:} superficies
+	      planas, cilíndricas, agujeros, roscas y formas complejas.\\[-10pt]
+	\item \textbf{Alcanza tolerancias estrechas:} típicamente del orden de
+	      $\pm\SI{0.025}{\milli\metre}$ o mejores, superiores a las de la mayoría
+	      de
+	      procesos de formado.\\[-10pt]
+	\item \textbf{Produce buenos acabados superficiales:} rugosidades del orden de
+	      $R_a\approx\SI{0.4}{\micro\metre}$ o menores.\\[-10pt]
+	\item \textbf{Complementa a otros procesos:} piezas fundidas o forjadas se
+	      mecanizan después para lograr agujeros roscados, superficies de ajuste
+	      y otras características de precisión.\\[-10pt]
+	\item \textbf{Es económico en lotes pequeños:} no requiere moldes ni matrices,
+	      por lo que es adecuado para prototipos y series cortas.
+\end{itemize}
+
+Como contrapartida, genera desperdicio de material en forma de viruta y suele
+requerir más tiempo que los procesos de formado.
+
+\subsection*{7. ¿Cuáles son los parámetros de una operación de mecanizado que se
+	incluyen dentro del alcance de las condiciones de corte?}
+
+Las condiciones de corte de una operación comprenden la velocidad de
+corte $V_c$, el avance $f$, la profundidad de corte y el uso (o no) de un fluido
+de corte y su tipo.
+
+\vspace{6pt}
+
+Estos valores se eligen según el material de la pieza, el material de la
+herramienta y el objetivo de la pasada (desbaste o acabado). En nuestro aserrado
+manual, la velocidad quedó determinada por el ritmo del operario, el avance por
+la fuerza aplicada y la profundidad por el progreso de la ranura; ninguno de
+estos valores se midió.
+
+% ===== 7. CONCLUSIONES ===============================================
+\section{CONCLUSIONES}
+
+\begin{itemize}
+	\item Se realizó el corte de la pieza N\textdegree 01 de Fe con arco de sierra
+	      y tornillo de banco, respetando la marca del docente de aproximadamente
+	      \SI{70}{\milli\metre}, y se registró la operación en la hoja del
+	      laboratorio con herramienta, tiempos e inspección.\\[-10pt]
+	\item La operación tomó \SI{24}{\minute} frente a los \SI{30}{\minute}
+	      estimados, es decir, el 80\,\% del tiempo previsto. Con una sola pieza
+	      no puede generalizarse este resultado, pero indica que la estimación
+	      fue razonable.\\[-10pt]
+	\item En el aserrado manual las condiciones de corte (velocidad, avance y
+	      profundidad) las determina el operario y no pueden fijarse con precisión
+	      como en una máquina. Esto hace que el tiempo y la calidad del corte
+	      dependan de la destreza y del estado de la hoja.\\[-10pt]
+	\item Cada diente de la hoja actúa como una herramienta de un filo que remueve
+	      una cantidad mínima de material; por eso se necesitan muchas carreras
+	      para atravesar la pieza. El mecanismo es el mismo que en el corte
+	      ortogonal estudiado en la teoría.\\[-10pt]
+	\item La pieza cortada queda lista como material de partida para el torno, lo
+	      que muestra la lógica de encadenar operaciones dejando un sobrante para
+	      la siguiente.
+\end{itemize}
+
+% ===== 8. RECOMENDACIONES ============================================
+\section{RECOMENDACIONES}
+
+\begin{itemize}
+	\item Registrar el tipo de hoja (dientes por pulgada) y, si es posible, contar
+	      las carreras por minuto durante un intervalo corto, para poder estimar la
+	      velocidad de corte.\\[-10pt]
+	\item Elegir el paso de la hoja según la sección de la pieza: al menos dos o
+	      tres dientes deben estar en contacto con el material, y más finos si se
+	      trata de un tubo o perfil delgado.\\[-10pt]
+	\item Sujetar la pieza firmemente y cerca de la línea de corte; cortar con
+	      presión en la carrera de avance y aliviarla en el retorno; iniciar con
+	      una
+	      pequeña ranura guía sobre la marca.\\[-10pt]
+	\item Usar lentes de seguridad y retirar las rebabas del corte con una lima
+	      antes de manipular o medir la pieza.
+\end{itemize}
+
+% ===== 9. ENSAYOS VIRTUALES ==========================================
+\section{ENSAYOS VIRTUALES}
+
+No se encontró un simulador gratuito específico del aserrado manual. Los
+siguientes recursos permiten reforzar la teoría del corte y los ensayos con
+fuerzas de corte que no pudieron realizarse en esta práctica:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+	\item \textbf{Virtual Labs (Ministerio de Educación de la India).} Portal de
+	      laboratorios virtuales de ingeniería, con experimentos web de
+	      manufactura y procesos de formado y mecanizado. \\
+	      \url{https://www.vlab.co.in}\\[-4pt]
+	\item \textbf{Monitoring of Cutting Forces in Turning} (Sredanovic y Carou,
+	      2024). Capítulo de acceso abierto que describe un procedimiento de
+	      laboratorio para medir las fuerzas de corte en el torneado y analizar su
+	      efecto en la precisión dimensional. \\
+	      \url{https://doi.org/10.1007/978-3-031-48468-1_8}\\[-4pt]
+	\item \textbf{Cutting forces during turning (GUNT).} Descripción de un equipo
+	      didáctico con transductor de tres componentes para medir fuerza de
+	      corte,
+	      de avance y pasiva, equivalente al dinamómetro citado en la teoría. \\
+	      \url{https://www.gunt.de/en/products/mechatronics/manufacturing-engineering/technological-experiments/cutting-forces-during-turning/054.10200/ft102/glct-1:pa-148:ca-67:pr-367}
+\end{enumerate}
+
+% ===== 10. ACCIDENTES RELACIONADOS ===================================
+\section{ACCIDENTES RELACIONADOS}
+
+La pieza cortada pasa al torno, y los accidentes más graves en talleres de
+mecanizado ocurren con piezas en rotación. Se mencionan tres casos documentados
+por organismos oficiales:
+
+\begin{itemize}
+	\item \textbf{Maquinista atrapado por la manga en un torno (Oregón,
+		      EE.\,UU.).}
+	      Un maquinista de 69 años con más de 30 de experiencia murió cuando la
+	      manga de su ropa se enredó en la pieza que giraba en un torno. Un
+	      compañero pulsó el botón rojo de la máquina para detenerla, pero no era
+	      un paro de emergencia y la máquina siguió funcionando. El informe
+	      recomienda una política de vestimenta para operadores, formación en
+	      peligros y supervisión de conductas seguras. \\
+	      \url{https://www.cdc.gov/niosh/face/pdfs/12or018.pdf}\\[-4pt]
+	\item \textbf{Torno con protecciones anuladas (Wisconsin, 2016).} Un operador
+	      de 36 años se enredó en el husillo mientras pulía a mano un cilindro
+	      metálico de 40 pulgadas y murió dos días después. La OSHA halló que la
+	      empresa dejaba operar el torno con los enclavamientos de seguridad
+	      anulados y la sancionó por una infracción deliberada y una grave. \\
+	      \url{https://www.dol.gov/newsroom/releases/osha/osha20160906}\\[-4pt]
+	\item \textbf{Guante atrapado en un chavetero (Bethlehem Steel, inspección de
+		      1991).} Un
+	      maquinista con 12 años de experiencia pulía con lija el cuello de un
+	      rodillo que giraba a 344 rpm y usaba guantes de cuero; el puño de un
+	      guante quedó atrapado en un chavetero y murió. Existía una norma escrita
+	      que prohibía los guantes y había sido advertido esa mañana. \\
+	      \url{https://www.osha.gov/ords/imis/accidentsearch.accident_detail?id=889444}
+\end{itemize}
+
+En el aserrado manual los riesgos son distintos pero también reales: cortes por
+la hoja o por rebabas, rotura de la hoja y desplazamiento de una pieza mal
+sujeta.
+
+% ===== 11. BIBLIOGRAFÍA ==============================================
+\section{BIBLIOGRAFÍA}
+
+\begin{enumerate}[label={[\arabic*]},ref=\arabic*,leftmargin=2.2em,itemsep=2pt]
+	\item Choudhury, A. R. (2021). \emph{Metal cutting and machine tools.} NPTEL,
+	      Indian Institute of Technology Kharagpur. NPTEL – Metal Cutting and
+	      Machine Tools\\[-8pt]
+	\item Trent, E. M., \& Wright, P. K. (2000). \emph{Metal cutting} (4th ed.).
+	      Butterworth-Heinemann. Metal Cutting – ScienceDirect\\[-8pt]
+	\item Groover, M. P. (2007). \emph{Fundamentos de
+		      manufactura moderna: materiales, procesos y sistemas} (3\textdegree
+	      ed.). McGraw-Hill.\\[-8pt]
+	\item Kalpakjian, S., \& Schmid, S. R. (2014).
+	      \emph{Manufactura, ingeniería y tecnología} (7\textdegree ed.). Pearson
+	      Educación.\\[-8pt]
+	\item Oregon FACE Program. (2014). \emph{Experienced
+		      Journeyman Machinist Killed While Operating an Engine Lathe} (Informe
+	      OR 2012-18-1). Oregon Institute of Occupational Health Sciences.
+	      \url{https://www.cdc.gov/niosh/face/pdfs/12or018.pdf}\\[-8pt]
+	\item U.S. Department of Labor, OSHA. (2016). \emph{OSHA's
+		      investigation of lathe operator's fatal injuries finds machine guards
+		      were bypassed at Wisconsin machining facility} [Comunicado de prensa].
+	      \url{https://www.dol.gov/newsroom/releases/osha/osha20160906}\\[-8pt]
+	\item U.S. Department of Labor, OSHA. (s.\,f.).
+	      \emph{Accident
+		      Report Detail, Summary Nr. 889444: Employee killed when head strikes
+		      against lathe.}
+	      \url{https://www.osha.gov/ords/imis/accidentsearch.accident_detail?id=889444}\\[-8pt]
+	\item Virtual Labs, Ministry of Education (India).
+	      \url{https://www.vlab.co.in}\\[-8pt]
+	\item Sredanovic, B., \& Carou, D. (2024). Monitoring of
+	      Cutting Forces in Turning. En \emph{Materials Forming, Machining and
+		      Tribology} (pp. 131--149). Springer.
+	      \url{https://doi.org/10.1007/978-3-031-48468-1_8}
+\end{enumerate}
+
+\end{document}
